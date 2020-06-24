@@ -30,7 +30,7 @@ class GaussianDistribution(Distribution):
 
 
 class Node(object):
-    __slots__ = ('neighbors', '_index', 'orders', 'drivers',
+    __slots__ = ('neighbours', '_index', 'orders', 'drivers',
                  'order_num', 'idle_driver_num', 'offline_driver_num'
                  'order_generator', 'offline_driver_num', 'order_generator',
                  'n_side', 'layers_neighbors', 'layers_neighbors_id')
@@ -40,7 +40,7 @@ class Node(object):
         self._index = index   # unique node id: a string
 
         # public
-        self.neighbors = []  # a list of nodes that neighboring the Nodes
+        self.neighbours = []  # a list of nodes that neighboring the Nodes
         self.orders = {}    # a dictionary of order objects contained in this node. Notice that future order also exist, so we need to choose from it
         self.drivers = {}    # a dictionary of driver objects contained in this node
         self.order_num = 0
@@ -109,11 +109,12 @@ class Node(object):
     def get_idle_drivers(self):
         for driver_id, driver in self.drivers.items():
             assert driver.online is True
+            assert driver.onservice is False
         return self.drivers
 
 
-    def set_neighbors(self, nodes_list):
-        self.neighbors = nodes_list
+    def set_neighbours(self, nodes_list):
+        self.neighbours = nodes_list
 
     def set_expired_driver_offline(self, city_time):
         """
@@ -141,11 +142,15 @@ class Node(object):
     def remove_unfinished_order(self, city_time):
         """ Remove the orders that are expired (waiting time is too long) """
         keys = list(self.orders.keys())
+        count = 0
         for order_id in keys:
             # order not served
             order = self.orders[order_id]
             if order.get_wait_time()+order.get_begin_time() < city_time:
                 self.orders.pop(order_id)
+                count += 1
+        return count
+
 
     def remove_dispatched_order(self, order_id):
         """ Remove the orders that are dispatched to drivers """
@@ -173,6 +178,9 @@ class Driver(object):
 
     def set_position(self, node):
         self.node = node
+
+    def get_position(self):
+        return self.node
 
     def set_order_start(self, order):
         self.order = order

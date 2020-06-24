@@ -23,10 +23,11 @@ RANDOM_SEED = 0  # unit test use this random seed.
 
 class CityReal:
 
-    def __init__(self, all_grids, start_time_string, real_bool, coordinate_based, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
+    def __init__(self, all_grids, neighbour_dict, start_time_string, real_bool, coordinate_based, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
                  init_idle_driver, working_time_dist, probability=1.0/28, real_orders="", order_generation_interval=600):
         """
         :param all_grids: a list of hexagon grid ids
+        :param neighbour_dict: a dict of {gridID: neighbour grid list} of radius 1 and 2
         :param start_time_string: a string of the start time of the simulator
         :param real_bool: a boolean value represent whether the order is real (True, the same as the historical data) or bootstrapped (False, can vary greatly)
         :param coordinate_based: a boolean value represent whether the simulator is a grid based one or coordinate base one
@@ -62,6 +63,14 @@ class CityReal:
         self.grids = {node_id: Node(node_id) for node_id in self.grid_ids}  # a dict of grid objects
         self.n_grids = len(self.grid_ids)
 
+        for grid_id, grid in self.grids.items():
+            neighbour = []
+            for radius in range(2):
+                neighbour.append([])
+                for idx in range(len(neighbour_dict[grid_id][radius])):
+                    neighbour[radius].append(self.grids[neighbour_dict[grid_id][radius][idx]])
+            grid.set_neighbours(neighbour)
+
         self.start_time = start_time_string  # e.g. "2016/11/01 10:00:00"
         self.city_time = int(time.mktime(datetime.strptime(self.start_time, "%Y/%m/%d %H:%M:%S").timetuple()))
         self.order_response_rate = 0
@@ -76,6 +85,7 @@ class CityReal:
         self.transition_trip_time_dict = transition_trip_time_dict
         self.transition_reward_dict = transition_reward_dict
         self.distribution_name = "Poisson"
+        self.expired_order = 0
 
         self.drivers = {}  # driver[driver_id] = driver_instance, driver_id start from 0
         self.onservice_drivers = {}
@@ -92,7 +102,7 @@ class CityReal:
         self.day_orders = []  # one day's order.
 
 
-    def get_observation(self):   # TODO: modify state space
+    def get_observation(self):
         next_state = np.zeros((2, self.n_grids))   # 原来的代码像CNN一样活着，我们就暂时不必了，我们直接铺开。。。不用geographical info了
         for idx, grid_id in enumerate(self.grid_ids):
             # if grid is not None:
@@ -110,6 +120,38 @@ class CityReal:
             d = list(grid.get_idle_drivers().values())
             state[grid_id] = [o,d]
         return state
+
+    def get_observation_neighbour(self):
+        """ Return the observation containing each idle driver's location, time and the active orders and idle drivers inside its neighbour
+        """
+        state = {}
+        for grid_id, grid in self.grids.items():
+            drivers = list(grid.get_idle_drivers().values())
+            orders = self.get_active_order_neighbour(grid)
+            neighbour_drivers = self.get_active_driver_neighbour(grid)
+            for driver in drivers:
+                driver_id = driver.get_driver_id()
+                loc = driver.get_position().get_node_index()
+                time = driver.city_time
+                neighbour_drivers.remove(driver)  # pop itself
+                assert driver_id not in state
+                state[driver_id] = [(loc, time), orders, neighbour_drivers]
+                neighbour_drivers.append(driver)  # insert back
+        return state
+
+    def get_active_order_neighbour(self, grid):
+        neighbour = [grid] + grid.neighbours[0]
+        orders = []
+        for g in neighbour:
+            orders += g.get_active_orders(self.city_time)
+        return orders
+
+    def get_active_driver_neighbour(self, grid):
+        neighbour = [grid] + grid.neighbours[0] + grid.neighbours[1]
+        drivers = []
+        for g in neighbour:
+            drivers += list(g.get_idle_drivers().values())
+        return drivers
 
     def get_num_idle_drivers(self):
         """ Compute idle drivers
@@ -180,7 +222,7 @@ class CityReal:
             self.utility_real_oneday_order()
         # Init current driver distribution
         self.utility_add_driver_real_new()
-        return self.get_observation_verbose()
+        return self.get_observation_neighbour()
 
     def utility_add_driver_real_new(self):
         n_total_drivers = len(self.drivers.keys())
@@ -248,7 +290,7 @@ class CityReal:
     def step_remove_unfinished_orders(self):
         for grid_id, grid in self.grids.items():
             if grid is not None:
-                grid.remove_unfinished_order(self.city_time)
+                self.expired_order += grid.remove_unfinished_order(self.city_time)
 
     def step_pre_order_assigin(self, next_state):
 
@@ -350,7 +392,7 @@ class CityReal:
         """    T      """
         reward = self.step_dispatch(dispatch_actions)
 
-        # increase city time t + 1
+        # increase city time
         self.step_increase_city_time()
         """    T  +   2s     """
         self.step_add_finished_drivers()  # drivers finish order become available again and added to new grid
@@ -365,5 +407,5 @@ class CityReal:
 
         self.step_driver_offline_nodewise()
         self.step_remove_unfinished_orders()   # remove the orders with
-        next_state = self.get_observation_verbose()
+        next_state = self.get_observation_neighbour()
         return next_state, reward, info
