@@ -238,7 +238,15 @@ class CityReal:
         self.n_drivers += new_driver_count
 
     def utility_real_oneday_order(self):
-        pass
+        new_order_count = 0
+        for order in self.real_orders:
+            # here order is in the format of start_grid_id, start_time, end_grid_id, trip_time, price, start_lng, start_lat, end_lng, end_lat
+            if int(order[1]) >= self.city_time:
+                start_grid = self.grids[order[0]]
+                end_grid = self.grids[order[2]]
+                start_grid.add_order(new_order_count + self.n_orders, int(order[1]), end_grid, int(order[3]), float(order[4]))  # can specify wait time here
+                new_order_count += 1
+
 
     def step_add_finished_drivers(self):
         """ Deal with finished orders, check driver status. finish order, add then to the destination node

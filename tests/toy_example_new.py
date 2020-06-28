@@ -58,8 +58,9 @@ with open("real_order_20161101.pkl", "rb") as pk:
     real_order_list = pickle.load(pk)
 
 end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
-myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", False, False, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
-                 init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
+myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", real_bool=True, coordinate_based=False, order_num_dist=order_num_dist,
+                  transition_prob_dict=transition_prob_dict, transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
+                 init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
 
 for episode in range(1):
     s = myCity.reset_clean(city_time="2016/11/01 10:00:00")
