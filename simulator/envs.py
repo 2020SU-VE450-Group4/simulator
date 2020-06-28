@@ -360,7 +360,7 @@ class CityReal:
             if order_id is not None:  # the assigned order is a real order
                 order_grid.remove_dispatched_order(order_id)
 
-        reward = self.get_reward_average()
+        reward = self.get_reward_per_driver(dispatched_drivers)
         return reward
 
     def step_increase_city_time(self):
@@ -384,6 +384,17 @@ class CityReal:
             reward += ontrip_order.get_price() / ontrip_order.get_duration()
         return reward
 
+    def get_reward_per_driver(self, dispatched_drivers):
+        reward_dict = {}
+        for driver in dispatched_drivers:
+            reward_dict[driver.get_driver_id()] = driver.get_order().get_price()
+        return reward_dict
+
+    @staticmethod
+    def get_global_reward(reward_dict):
+        """ Record the accumulative reward city-wide
+        """
+        return sum(reward_dict.values())
 
 
     def step(self, dispatch_actions):
@@ -409,3 +420,5 @@ class CityReal:
         self.step_remove_unfinished_orders()   # remove the orders with
         next_state = self.get_observation_neighbour()
         return next_state, reward, info
+
+

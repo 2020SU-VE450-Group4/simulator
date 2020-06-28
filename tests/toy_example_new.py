@@ -2,7 +2,7 @@ from simulator.envs import *
 import json
 import pickle
 # to-do list in priority order
-# TODO: define a pick-up dictionary
+# TODO: Define a pick-up dictionary
 # TODO: Real order injection
 # TODO: specify idle driver transition
 # TODO: coodinate based version
@@ -54,9 +54,12 @@ with open("driver_distribution_dict.pkl", "rb") as pk:
 with open("time_distribution_1000.pkl", "rb") as pk:
     time_dist = pickle.load(pk)
 
+with open("real_order_20161101.pkl", "rb") as pk:
+    real_order_list = pickle.load(pk)
+
 end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
 myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", False, False, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
-                 init_idle_driver, time_dist)
+                 init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
 
 for episode in range(1):
     s = myCity.reset_clean(city_time="2016/11/01 10:00:00")
@@ -67,7 +70,11 @@ for episode in range(1):
         s_, reward, info = myCity.step(action)
         print(reward)
         s = s_
-        episode_reward += reward
+        if isinstance(reward, dict):
+            global_reward = myCity.get_global_reward(reward)
+            episode_reward += global_reward
+        else:
+            episode_reward += reward
         print(myCity.city_time)
         if myCity.city_time >= end_time:
             break

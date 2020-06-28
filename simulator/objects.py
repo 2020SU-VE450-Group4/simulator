@@ -43,7 +43,7 @@ class Node(object):
         self.neighbours = []  # a list of nodes that neighboring the Nodes
         self.orders = {}    # a dictionary of order objects contained in this node. Notice that future order also exist, so we need to choose from it
         self.drivers = {}    # a dictionary of driver objects contained in this node
-        self.order_num = 0
+        self.order_num = 0  # number of existed orders in this node, used to generate unique order id
         self.idle_driver_num = 0  # number of idle drivers in this node
         self.offline_driver_num = 0
         self.order_generator = None
