@@ -292,4 +292,4 @@ class Order(object):
         return self._waiting_time
 
     def print_order(self):
-        print("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
+        print("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p )
