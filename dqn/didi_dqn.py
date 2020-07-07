@@ -22,18 +22,32 @@ DIM_STATE = 2
 DIM_ACTION = 2
 
 env = create_city()
+grid_map = {id: i for i, id in enumerate(env.grid_ids)}
 
 
 class Net(nn.Module):
     def __init__(self, dim_in, dim_out):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(dim_in, EMBED_SIZE)
+        hidden_layer_unit = [512, 256, 128, 64]
+        self.fc1 = nn.Linear(dim_in, hidden_layer_unit[0])
         self.fc1.weight.data.normal_(0, 0.1)   # initialization
-        self.out = nn.Linear(EMBED_SIZE, dim_out)
+        self.fc2 = nn.Linear(hidden_layer_unit[0], hidden_layer_unit[1])
+        self.fc2.weight.data.normal_(0, 0.1)  # initialization
+        self.fc3 = nn.Linear(hidden_layer_unit[1], hidden_layer_unit[2])
+        self.fc3.weight.data.normal_(0, 0.1)  # initialization
+        self.fc4 = nn.Linear(hidden_layer_unit[2], hidden_layer_unit[3])
+        self.fc4.weight.data.normal_(0, 0.1)  # initialization
+        self.out = nn.Linear(hidden_layer_unit[3], dim_out)
         self.out.weight.data.normal_(0, 0.1)   # initialization
 
     def forward(self, x):
         x = self.fc1(x)
+        x = nn.functional.relu(x)
+        x = self.fc2(x)
+        x = nn.functional.relu(x)
+        x = self.fc3(x)
+        x = nn.functional.relu(x)
+        x = self.fc4(x)
         x = nn.functional.relu(x)
         actions_value = self.out(x)
         return actions_value
@@ -41,11 +55,11 @@ class Net(nn.Module):
 
 class DQN(object):
     def __init__(self, dim_states, dim_action):
-        self.eval_net, self.target_net = Net(dim_states+1, 1), Net(dim_action+1, 1)
+        self.eval_net, self.target_net = Net(dim_states+dim_action, 1), Net(dim_action+dim_action, 1)
 
         self.learn_step_counter = 0                                     # for target updating
         self.memory_counter = 0                                         # for storing memory
-        self.memory = np.zeros((MEMORY_CAPACITY, dim_states * 2 + 4))     # initialize memory
+        self.memory = np.zeros((MEMORY_CAPACITY, dim_states * 2 + dim_action*2 + 2))     # initialize memory
         self.optimizer = torch.optim.Adam(self.eval_net.parameters(), lr=LR)
         self.loss_func = nn.MSELoss()
 
@@ -88,11 +102,9 @@ class DQN(object):
         # sample batch transitions
         sample_index = np.random.choice(MEMORY_CAPACITY, BATCH_SIZE)
         b_memory = self.memory[sample_index, :]
-        state_action = torch.tensor(b_memory[:, :N_STATES+1], dtype=torch.float)
-        # state = torch.tensor(b_memory[:, :N_STATES], dtype=torch.float)
-        # action = torch.tensor(b_memory[:, N_STATES:N_STATES+1],  dtype=torch.long)
-        reward = torch.tensor(b_memory[:, N_STATES+1:N_STATES+2], dtype=torch.float)
-        detach_state = torch.tensor(b_memory[:, -N_STATES-2:-1], dtype=torch.float)
+        state_action = torch.tensor(b_memory[:, :DIM_STATE+1], dtype=torch.float)
+        reward = torch.tensor(b_memory[:, DIM_STATE+1:DIM_STATE+2], dtype=torch.float)
+        detach_state = torch.tensor(b_memory[:, -DIM_STATE-2:-1], dtype=torch.float)
         done = torch.tensor(b_memory[:, -1], dtype=torch.float)
 
         # q_eval w.r.t the action in experience
@@ -108,7 +120,10 @@ class DQN(object):
 
 if __name__ == '__main__':
     dqn = DQN()
-    end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
+    end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))
+    # can change the end time here
+
+    print("Start training")
 
     for episode in range(1):
         # dicts of current active {drivers: [(loc, time), orders, neighbours]}
@@ -123,22 +138,21 @@ if __name__ == '__main__':
             for driver, [(loc, time), orders, drivers] in states.items():
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 if len(orders):
-                    actions = [[o.get_begin_position_id(), o.get_begin_position_id()] for o in orders]
-                    aid = dqn.choose_action((loc, time), actions)
+                    actions = [[grid_map[o.get_begin_position_id()],
+                                grid_map[o.get_begin_position_id()]] for o in orders]
+                    aid = dqn.choose_action([grid_map[loc], time], actions)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
                     dispatch_actions.append([loc, driver, orders[aid].get_begin_position_id(),
                                              orders[aid].order_id, orders[aid]])
                     if driver in busy_drivers.keys(): # means it has finished previous order!
-                        drivers_to_store.append(busy_drivers[driver] + [loc, time])
-                    busy_drivers[driver] = [loc, time]
+                        drivers_to_store.append(busy_drivers[driver] + [grid_map[loc], time])
+                    busy_drivers[driver] = [grid_map[loc], time]
             states, r_, info = env.step(dispatch_actions)
             for driver in busy_drivers.keys():
                 assert driver not in r_
                 busy_drivers[driver].append(r_[driver])
                 episode_reward += r_[driver]
-
-
 
         print("Episode reward", episode_reward)
         print("Response rate", env.expired_order / env.n_orders)
