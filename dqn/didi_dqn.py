@@ -11,13 +11,13 @@ from dqn.city import create_city
 # print(os.getcwd())
 
 # Hyper Parameters
-BATCH_SIZE = 32
-EMBED_SIZE = 50
-LR = 0.01                   # learning rate
+BATCH_SIZE = 256
+LR = 0.0001                   # learning rate
 EPSILON = 0.9               # greedy policy
-GAMMA = 0.9                 # reward discount
-TARGET_REPLACE_ITER = 100   # target update frequency
-MEMORY_CAPACITY = 2000
+# TODO: modify the constant epsilon
+GAMMA = 0.95                 # reward discount
+TARGET_REPLACE_ITER = 3000  # target update frequency
+MEMORY_CAPACITY = 5000
 DIM_STATE = 2
 DIM_ACTION = 2
 
@@ -87,7 +87,7 @@ class DQN(object):
         return action
 
     def store_transition(self, s, a, r, s_, a_, done):
-        transition = np.hstack((s, [a, r], s_, a_, done))
+        transition = np.hstack((s, a, [r], s_, a_, done))
         # replace the old memory with new memory
         index = self.memory_counter % MEMORY_CAPACITY
         self.memory[index, :] = transition
@@ -102,9 +102,9 @@ class DQN(object):
         # sample batch transitions
         sample_index = np.random.choice(MEMORY_CAPACITY, BATCH_SIZE)
         b_memory = self.memory[sample_index, :]
-        state_action = torch.tensor(b_memory[:, :DIM_STATE+1], dtype=torch.float)
-        reward = torch.tensor(b_memory[:, DIM_STATE+1:DIM_STATE+2], dtype=torch.float)
-        detach_state = torch.tensor(b_memory[:, -DIM_STATE-2:-1], dtype=torch.float)
+        state_action = torch.tensor(b_memory[:, :DIM_STATE+DIM_ACTION], dtype=torch.float)
+        reward = torch.tensor(b_memory[:, DIM_STATE+DIM_ACTION:DIM_STATE+DIM_ACTION+1], dtype=torch.float)
+        detach_state = torch.tensor(b_memory[:, -DIM_STATE-DIM_ACTION-1:-1], dtype=torch.float)
         done = torch.tensor(b_memory[:, -1], dtype=torch.float)
 
         # q_eval w.r.t the action in experience
@@ -119,17 +119,17 @@ class DQN(object):
 
 
 if __name__ == '__main__':
-    dqn = DQN()
+    dqn = DQN(DIM_STATE, DIM_ACTION)
     end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))
     # can change the end time here
 
     print("Start training")
 
-    for episode in range(1):
+    for episode in range(10000):
         # dicts of current active {drivers: [(loc, time), orders, neighbours]}
         states = env.reset_clean(city_time="2016/11/01 10:00:00")
         episode_reward = 0
-        busy_drivers = {}  # driver: [loc, time, reward, _loc?, _time?]  --> ?: may have or may not
+        busy_drivers = {}  # driver: [loc, time, action, reward, _loc, _time, _action]  --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
 
         while env.city_time < end_time:
             dispatched_orders = set()   # track orders that are taken
@@ -137,22 +137,30 @@ if __name__ == '__main__':
             drivers_to_store = []
             for driver, [(loc, time), orders, drivers] in states.items():
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
+                # TODO: add other possible actions: like reposition and stay idle
+                # orders.append()  # generate new virtual orders (idle/reposition actions)
                 if len(orders):
                     actions = [[grid_map[o.get_begin_position_id()],
-                                grid_map[o.get_begin_position_id()]] for o in orders]
+                                grid_map[o.get_end_position_id()]] for o in orders]
                     aid = dqn.choose_action([grid_map[loc], time], actions)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
                     dispatch_actions.append([loc, driver, orders[aid].get_begin_position_id(),
                                              orders[aid].order_id, orders[aid]])
-                    if driver in busy_drivers.keys(): # means it has finished previous order!
-                        drivers_to_store.append(busy_drivers[driver] + [grid_map[loc], time])
-                    busy_drivers[driver] = [grid_map[loc], time]
+                    if driver in busy_drivers.keys():  # means it has just finished previous order and become idle again
+                        _s = [grid_map[loc], time]
+                        _a = dqn.choose_action_max(_s, actions)
+                        # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc], time])
+                        ps, pa, pr = busy_drivers[driver]
+                        dqn.store_transition(ps, pa, pr, _s, _a, False)
+                    busy_drivers[driver] = [[grid_map[loc], time], a]
             states, r_, info = env.step(dispatch_actions)
-            for driver in busy_drivers.keys():
-                assert driver not in r_
+            for driver in r_.keys():
+                assert driver in busy_drivers
                 busy_drivers[driver].append(r_[driver])
                 episode_reward += r_[driver]
+            if dqn.memory_counter > MEMORY_CAPACITY:
+                dqn.learn()
 
         print("Episode reward", episode_reward)
         print("Response rate", env.expired_order / env.n_orders)

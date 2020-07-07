@@ -337,6 +337,7 @@ class CityReal:
 
     def step_dispatch(self, dispatch_actions):
         """ Execute dispatch actions
+        TODO: define pickup process since driver may be in a different grid from the order
         :param dispatch_actions: in the form of (driver_grid_id, driver_id, order_grid_id, order_id, order)
                                  if the order is a real order, we only specify order_grid_id and order_id, and order is None
                                  if the order is an idle action or a reposition action,
@@ -355,7 +356,7 @@ class CityReal:
 
             if order is not None:  # the case of idle or reposition
                 order_grid = order.get_begin_position()
-                assert order_grid == driver_grid
+                # assert order_grid == driver_grid
             else:  # it is a real order inside the simulator
                 if order_grid_id not in self.grids:
                     raise ValueError('Step_dispatch: Order grid id error')

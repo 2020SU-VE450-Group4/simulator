@@ -270,6 +270,9 @@ class Order(object):
     def get_end_position(self):
         return self._end_p
 
+    def get_end_position_id(self):
+        return self._end_p.get_node_index()
+
     def get_end_coordinate(self):
         return self._end_coordinate
 
