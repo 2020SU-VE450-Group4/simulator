@@ -346,6 +346,7 @@ class CityReal:
         for action in dispatch_actions:
             driver_grid_id, driver_id, order_grid_id, order_id, order = action
             if driver_grid_id not in self.grids:
+                print(driver_grid_id)
                 raise ValueError('Step_dispatch: Driver grid id error')
             driver_grid = self.grids[driver_grid_id]
             if driver_id not in driver_grid.drivers:
