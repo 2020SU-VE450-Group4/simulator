@@ -1,13 +1,6 @@
-from simulator.envs import *
-import json
-import pickle
-# to-do list in priority order
-# TODO: Define a pick-up dictionary
-# TODO: Real order injection
-# TODO: specify idle driver transition
-# TODO: coodinate based version
-# TODO: Add new online idle drivers within the day
-# TODO: Specify more state/reward/action interface
+from dqn.city import create_city
+import time
+from datetime import datetime
 
 def random_dispatch(s):
     """
@@ -29,38 +22,9 @@ def random_dispatch(s):
                  order.order_id, None])
     return action
 
-# load all needed files
-with open("all_grid.pkl", "rb") as pk:
-    all_grids = pickle.load(pk)
-
-with open("grid_neighbour.json", "r") as fp:
-    neighbour_dict = json.load(fp)
-
-with open("20161101_demand_dict_grid_10min", "rb") as pk:
-    order_num_dist = pickle.load(pk)
-
-with open("trans_prob.json", "r") as fp:
-    transition_prob_dict = json.load(fp)
-
-with open("duration.json", "r") as fp:
-    transition_trip_time_dict = json.load(fp)
-
-with open("reward.json", "r") as fp:
-    transition_reward_dict = json.load(fp)
-
-with open("driver_distribution_dict.pkl", "rb") as pk:
-    init_idle_driver = pickle.load(pk)
-
-with open("time_distribution_1000.pkl", "rb") as pk:
-    time_dist = pickle.load(pk)
-
-with open("real_order_20161101.pkl", "rb") as pk:
-    real_order_list = pickle.load(pk)
 
 end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
-myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", real_bool=True, coordinate_based=False, order_num_dist=order_num_dist,
-                  transition_prob_dict=transition_prob_dict, transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
-                 init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
+myCity = create_city()
 
 for episode in range(1):
     s = myCity.reset_clean(city_time="2016/11/01 10:00:00")
@@ -80,4 +44,4 @@ for episode in range(1):
         if myCity.city_time >= end_time:
             break
     print("Episode reward", episode_reward)
-    print("Response rate", myCity.expired_order/myCity.n_orders)
+    print("Response rate", myCity.expired_order / myCity.n_orders)
