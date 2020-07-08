@@ -1,3 +1,9 @@
-*DS_Store*
+*.DS_Store
 __pycache__
 .idea/*
+.ipynb_checkpoints
+test.ipynb
+
+.idea
+
+model/a2c
