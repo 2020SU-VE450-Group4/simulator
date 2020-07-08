@@ -131,7 +131,7 @@ class CityReal:
             neighbour_drivers = self.get_active_driver_neighbour(grid)
             for driver in drivers:
                 driver_id = driver.get_driver_id()
-                loc = driver.get_position().get_node_index()
+                loc = driver.get_position()
                 time = driver.city_time
                 neighbour_drivers.remove(driver)  # pop itself
                 assert driver_id not in state
@@ -233,6 +233,7 @@ class CityReal:
 
         # clean orders and drivers
         self.n_orders = 0
+        self.expired_order = 0
         self.drivers = {}  # driver[driver_id] = driver_instance  , driver_id start from 0
         self.n_drivers = 0  # total idle number of drivers. online and not on service.
         self.n_offline_drivers = 0  # total number of offline drivers.
@@ -258,7 +259,7 @@ class CityReal:
         keys = list(self.onservice_drivers.keys())
         for driver_id in keys:
             driver = self.onservice_drivers[driver_id]
-            assert driver.city_time == self.city_time
+            # assert driver.city_time == self.city_time
             assert driver.onservice is True
             assert driver.online is True
             order_end_time = driver.order.get_assigned_time() + driver.order.get_duration()
@@ -366,6 +367,7 @@ class CityReal:
                 order = order_grid.orders[order_id]
 
             driver.take_order(order)
+            dispatched_drivers.append(driver)
             order.set_assigned_time(self.city_time)
             self.onservice_drivers[driver_id] = driver
             driver_grid.remove_driver(driver_id)

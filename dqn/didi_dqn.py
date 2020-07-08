@@ -5,6 +5,7 @@ import random
 import time
 from datetime import datetime
 from dqn.city import create_city
+from simulator.objects import Order
 
 
 # import os
@@ -138,22 +139,33 @@ if __name__ == '__main__':
             for driver, [(loc, time), orders, drivers] in states.items():
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 # TODO: add other possible actions: like reposition and stay idle
+                idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
+                orders.append(idle_order)
+                neighbours = loc.neighbours[0]
+                for nei_grid in neighbours:
+                    reposition_duration = 180
+                    if loc.get_node_index() in env.transition_trip_time_dict and \
+                            nei_grid.get_node_index() in env.transition_trip_time_dict[loc.get_node_index()]:
+                        reposition_duration = env.transition_trip_time_dict[loc.get_node_index()][nei_grid.get_node_index()][0]
+                    orders.append(Order(None, loc, nei_grid, env.city_time,
+                                        reposition_duration, price=0))
                 # orders.append()  # generate new virtual orders (idle/reposition actions)
+
                 if len(orders):
                     actions = [[grid_map[o.get_begin_position_id()],
                                 grid_map[o.get_end_position_id()]] for o in orders]
-                    aid = dqn.choose_action([grid_map[loc], time], actions)
+                    aid = dqn.choose_action([grid_map[loc.get_node_index()], time], actions)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
-                    dispatch_actions.append([loc, driver, orders[aid].get_begin_position_id(),
+                    dispatch_actions.append([loc.get_node_index(), driver, orders[aid].get_begin_position_id(),
                                              orders[aid].order_id, orders[aid]])
                     if driver in busy_drivers.keys():  # means it has just finished previous order and become idle again
-                        _s = [grid_map[loc], time]
+                        _s = [grid_map[loc.get_node_index()], time]
                         _a = dqn.choose_action_max(_s, actions)
-                        # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc], time])
+                        # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc.get_node_index()], time])
                         ps, pa, pr = busy_drivers[driver]
                         dqn.store_transition(ps, pa, pr, _s, _a, False)
-                    busy_drivers[driver] = [[grid_map[loc], time], a]
+                    busy_drivers[driver] = [[grid_map[loc.get_node_index()], time], a]
             states, r_, info = env.step(dispatch_actions)
             for driver in r_.keys():
                 assert driver in busy_drivers
@@ -163,7 +175,7 @@ if __name__ == '__main__':
                 dqn.learn()
 
         print("Episode reward", episode_reward)
-        print("Response rate", env.expired_order / env.n_orders)
+        print("Response rate", 1 - env.expired_order / env.n_orders)
 
 
 

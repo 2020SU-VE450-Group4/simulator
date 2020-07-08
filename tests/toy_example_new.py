@@ -23,7 +23,7 @@ def random_dispatch(s):
     return action
 
 
-end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
+end_time = int(time.mktime(datetime.strptime("2016/11/01 14:59:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
 myCity = create_city()
 
 for episode in range(1):
