@@ -4,7 +4,8 @@ from datetime import datetime
 from random import sample 
 
 os.getcwd()   
-#from simulator.envs import CityReal
+from simulator.envs import CityReal
+from model.km import  *
 from simulator import envs
 from model import km
 import json
@@ -144,9 +145,11 @@ def main():
     
     with open("real_order_20161101.pkl", "rb") as pk:
         real_order_list = pickle.load(pk)
-    
+
     with open("V.pkl", "rb") as pk:
+        global value_map
         value_map = pickle.load(pk)
+
     
     
     os.chdir('../')
