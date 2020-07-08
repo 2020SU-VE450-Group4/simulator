@@ -1,6 +1,5 @@
 
 import os,  time, datetime
-from datetime import datetime
 from random import sample 
 
 os.getcwd()   
@@ -10,12 +9,10 @@ from simulator import envs
 from model import km
 import json
 import pickle
-os.chdir('tests/')
+import argparse
  
-def get_dispatch_observ(s):
-    """
-    State input given by get_observation_verbose
-    """
+def get_dispatch_observ(s, num_sample):
+    
     dispatch_observ = []
     order_dict = {}
     driver_dict = {}
@@ -30,11 +27,11 @@ def get_dispatch_observ(s):
     return dispatch_observ, driver_dict, order_dict
 
 
-def dispatch(s):
+def dispatch(s, num_sample):
     """
     State input given by get_observation_verbose
     """
-    dispatch_observ, driver_dict, order_dict = get_dispatch_observ(s)
+    dispatch_observ, driver_dict, order_dict = get_dispatch_observ(s, num_sample)
     res = km_dispatch(dispatch_observ)
     
     dispatch_action = []
@@ -45,10 +42,11 @@ def dispatch(s):
     return dispatch_action
 
 
-def order_driver_bigraph(orders, drivers, dispatch_observ):
+def order_driver_bigraph(orders, drivers, dispatch_observ, num_sample):
     for o in orders:
         # TODO: sample more drivers
-        for d in sample(drivers,2):
+        sample_num = min ( num_sample, len(drivers))
+        for d in sample(drivers, sample_num):
             pair = {}
             pair['order_id'] = o.order_id
             pair['driver_id'] = d._driver_id
@@ -118,6 +116,7 @@ def print_state(s):
             print("Number of orders", len(orders))
 
 def main():
+    os.chdir('tests/')
     # load all needed files
     with open("all_grid.pkl", "rb") as pk:
         all_grids = pickle.load(pk)
@@ -146,19 +145,23 @@ def main():
     with open("real_order_20161101.pkl", "rb") as pk:
         real_order_list = pickle.load(pk)
 
-    with open("V.pkl", "rb") as pk:
+    parser = argparse.ArgumentParser(description='Planning and Learning dispatch')
+    parser.add_argument('--value', type=str, default="V.pkl", 
+                        help='state value *.pkl') 
+    parser.add_argument('--sample', type=int, default=2, 
+                        help='number of sample drivers for km') 
+    args = parser.parse_args()
+    with open(args.value, "rb") as pk:
         global value_map
         value_map = pickle.load(pk)
-
     
-    
+    args = parser.parse_args()
     os.chdir('../')
     
     end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
     myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", real_bool=True, coordinate_based=False, order_num_dist=order_num_dist,
                       transition_prob_dict=transition_prob_dict, transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
                      init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
-    
     
     for episode in range(1):
         s = myCity.reset_clean(city_time="2016/11/01 10:00:00")
