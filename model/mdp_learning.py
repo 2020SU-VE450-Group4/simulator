@@ -16,9 +16,9 @@ class MDP:
         self.gamma = 0.9  # constant
         self.tp = 300  # time period to divide time slot
         self.T = 24*60*60  # a large time period
-        with open("../../data_processing/mdp_data/data_20161101", "rb") as pk:
+        with open("../../data_processing/mdp_data/data_gps_20161104", "rb") as pk:
             self.data = pickle.load(pk)  # all information
-        #  initialize V, all grid and time slot has initial 0 value
+        #  initialize V, all grid and time  slot has initial 0 value
         vv = {}
         for t in range(int(self.T/self.tp)):
             vv[t] = 0
@@ -32,8 +32,6 @@ class MDP:
             t0 = l[0]
             g0 = l[1]
             n = len(l[2])
-            if i == 0:
-                print(t0, g0, n)
             for ll in l[2]:
                 t_ = ll[0]
                 g_ = ll[1]
@@ -44,10 +42,23 @@ class MDP:
 
                 self.V[g0][t0] = self.V[g0][t0] + 1/n * ((self.gamma ** delta_t) * self.V[g_][t_]
                                                          + self.r_gamma(r, delta_t))
-                if g0 == '23fae3f1f69dddfa':
-                    print(t_, t0, delta_t)
-                    print(self.V[g0][t0], self.r_gamma(r, delta_t), n)
-        with open('V.pkl', 'wb') as f:
+        with open('V20161104.pkl', 'wb') as f:
+            pickle.dump(self.V, f)
+
+    def meanV(self):
+        with open('V20161101.pkl', 'rb') as f:
+            df1 = pickle.load(f)
+        with open('V20161102.pkl', 'rb') as f:
+            df2 = pickle.load(f)
+        with open('V20161103.pkl', 'rb') as f:
+            df3 = pickle.load(f)
+        with open('V20161104.pkl', 'rb') as f:
+            df4 = pickle.load(f)
+
+        for ID in self.grids['gridID']:
+            for t in range(int(self.T/self.tp)):
+                self.V[ID][t] = (df1[ID][t]+df2[ID][t]+df3[ID][t]+df4[ID][t])/4
+        with open('V0104mean.pkl', 'wb') as f:
             pickle.dump(self.V, f)
 
     def r_gamma(self, r, t):
@@ -65,12 +76,13 @@ class MDP:
         return int((s + m * 60 + h * 60 * 60) / self.tp)
 
     def show(self):
-        with open('V.pkl', 'rb') as f:
+        with open('V0104mean.pkl', 'rb') as f:
             df = pickle.load(f)
         print(df['23fae3f1f69dddfa'])
 
 
 mdp = MDP()
 # mdp.make_dict()
+mdp.meanV()
 mdp.show()
 
