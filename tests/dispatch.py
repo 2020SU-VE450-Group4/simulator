@@ -1,5 +1,6 @@
 
-import os,  time, datetime
+import os, time
+from datetime import datetime
 from random import sample 
 
 os.getcwd()   
@@ -10,7 +11,8 @@ from model import km
 import json
 import pickle
 import argparse
- 
+
+
 def get_dispatch_observ(s, num_sample):
     
     dispatch_observ = []
@@ -18,7 +20,7 @@ def get_dispatch_observ(s, num_sample):
     driver_dict = {}
     for grid_id, state in s.items():
         _, orders, drivers = state
-        dispatch_observ = order_driver_bigraph(orders,drivers, dispatch_observ)
+        dispatch_observ = order_driver_bigraph(orders, drivers, dispatch_observ, num_sample)
         for d in drivers:
             driver_dict[d._driver_id] = d.node.get_node_index()
         for o in orders:
@@ -27,7 +29,7 @@ def get_dispatch_observ(s, num_sample):
     return dispatch_observ, driver_dict, order_dict
 
 
-def dispatch(s, num_sample):
+def dispatch(s, num_sample=2):
     """
     State input given by get_observation_verbose
     """
@@ -45,7 +47,7 @@ def dispatch(s, num_sample):
 def order_driver_bigraph(orders, drivers, dispatch_observ, num_sample):
     for o in orders:
         # TODO: sample more drivers
-        sample_num = min ( num_sample, len(drivers))
+        sample_num = min(num_sample, len(drivers))
         for d in sample(drivers, sample_num):
             pair = {}
             pair['order_id'] = o.order_id
@@ -146,7 +148,7 @@ def main():
         real_order_list = pickle.load(pk)
 
     parser = argparse.ArgumentParser(description='Planning and Learning dispatch')
-    parser.add_argument('--value', type=str, default="V.pkl", 
+    parser.add_argument('--value', type=str, default="V0104mean.pkl",
                         help='state value *.pkl') 
     parser.add_argument('--sample', type=int, default=2, 
                         help='number of sample drivers for km') 
@@ -169,12 +171,15 @@ def main():
         episode_reward = 0
         while True:
             print("Time: ", myCity.city_time )
+            print("Time: ", myCity.city_time, file=fnew_out)
             
             # write a simple pairing within each grid here
             action = dispatch(s)
             print("Action: ", action)
+            print("Action: ", action, file=fnew_out)
             s_, reward, info = myCity.step(action)
             print(reward)
+            print(reward, file=fnew_out)
             s = s_ 
             # print_state(s) 
             if isinstance(reward, dict):
@@ -185,7 +190,12 @@ def main():
             if myCity.city_time >= end_time:
                 break
         print("Episode reward", episode_reward)
+        print("Episode reward", episode_reward, file=fnew_out)
         print("Response rate", myCity.expired_order/myCity.n_orders)
-    
+        print("Response rate", myCity.expired_order / myCity.n_orders, file=fnew_out)
+
+
 if __name__ == '__main__':
+    fnew_out = open("new_output.txt", 'w+')
     main()
+    fnew_out.close()
