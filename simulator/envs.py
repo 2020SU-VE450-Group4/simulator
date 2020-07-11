@@ -105,17 +105,19 @@ class CityReal:
     def check_all_drivers_in_grids(self):
         num_idle_drivers = 0
         num_offline_drivers = 0
-        num_onservice_drivers = 0
+        num_onservice_drivers = len(self.onservice_drivers)
         for grid_id, grid in self.grids.items():
             num_idle_drivers += grid.idle_driver_num
             num_offline_drivers += grid.offline_driver_num
-            num_onservice_drivers += len(self.onservice_drivers)
 
         sum_ = num_idle_drivers + num_offline_drivers + num_onservice_drivers
         num_total_drivers = self.n_drivers
         if sum_ != num_total_drivers:
             print("sum_ = %d, num_total_drivers = %d." % (sum_, num_total_drivers))
             # print("In the grid %s, sum_ = %d, num_total_drivers = %d." % (grid_id, sum_, num_total_drivers))
+        else:
+            print("The drivers in all grids are correct now.")
+            # print("sum_ = %d, num_total_drivers = %d." % (sum_, num_total_drivers))
 
     def check_idle_drivers_in_grids(self):
         flag = True
@@ -123,6 +125,8 @@ class CityReal:
             if grid.idle_driver_num != len(grid.drivers):
                 flag = False
                 print("In the grid %s, idle_driver_num = %d, but length of drivers is %d." %(grid_id, grid.idle_driver_num, len(grid.drivers)))
+            # else:
+            #     print(grid.idle_driver_num)
         if flag:
             print("The idle driver in each grid is correct now.")
 
