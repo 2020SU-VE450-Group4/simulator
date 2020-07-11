@@ -3,6 +3,7 @@ import torch.nn as nn
 import numpy as np
 import random
 import time
+import os
 from datetime import datetime
 from dqn.city import create_city
 from simulator.objects import Order
@@ -21,11 +22,28 @@ EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.95                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
 MEMORY_CAPACITY = 10000
-DIM_STATE = 2
-DIM_ACTION = 2
+NUM_GRIDS = 1322
+NUM_TIME_INTERVAL = 48
+DIM_STATE = NUM_GRIDS + NUM_TIME_INTERVAL
+DIM_ACTION = 2 * NUM_GRIDS
+directory = os.path.dirname(__file__)
+
+
+def get_grid_one_hot(idx, n=1322):
+    tmp = [0] * n
+    tmp[idx] = 1
+    return tmp
+
+
+def get_time_one_hot(t):
+    idx = datetime.fromtimestamp(t).hour * 2 + datetime.fromtimestamp(t).minute//30
+    tmp = [0] * 48
+    tmp[idx] = 1
+    return tmp
+
 
 env = create_city()
-grid_map = {id: i for i, id in enumerate(env.grid_ids)}
+grid_map = {id: get_grid_one_hot(i) for i, id in enumerate(env.grid_ids)}
 
 
 class Net(nn.Module):
@@ -59,6 +77,8 @@ class Net(nn.Module):
 class DQN(object):
     def __init__(self, dim_states, dim_action):
         self.eval_net, self.target_net = Net(dim_states+dim_action, 1), Net(dim_action+dim_action, 1)
+        self.eval_net.load_state_dict(torch.load(directory + "/eval_net"))
+        self.target_net.load_state_dict(torch.load(directory + "/target_net"))
 
         self.learn_step_counter = 0                                     # for target updating
         self.memory_counter = 0                                         # for storing memory
@@ -69,7 +89,7 @@ class DQN(object):
     def choose_action(self, _s, _actions, epsilon):
         values = []
         for a in _actions:
-            x = torch.unsqueeze(torch.tensor(np.append(_s, a), dtype=torch.float), 0)  # add dimension at 0
+            x = torch.unsqueeze(torch.tensor(_s + a, dtype=torch.float), 0)  # add dimension at 0
             values.append(self.eval_net.forward(x).data.numpy().flatten()[0])
         if np.random.uniform() < epsilon:  # greedy
             _a = np.argmax(values)
@@ -129,16 +149,22 @@ if __name__ == '__main__':
     print("Start training")
 
     epsilon = EPSILON_START
-    for episode in range(100):
+    minutes = 30
+    for episode in range(50):
         # dicts of current active {drivers: [(loc, time), orders, neighbours]}
         states = env.reset_clean(city_time="2016/11/01 10:00:00")
+        start_time = env.city_time
+
         episode_reward = 0
-        busy_drivers = {}  # driver: [loc, time, action, reward, _loc, _time, _action]  --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
+        busy_drivers = {}
+        # driver: [loc, time, action, reward, _loc, _time, _action]
+        #   --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
 
         count = 0
         while env.city_time < end_time:
             count += 1
-            if epsilon < EPSILON_END: epsilon += EPSILON_STEP
+            if epsilon < EPSILON_END:
+                epsilon += EPSILON_STEP
             dispatched_orders = set()   # track orders that are taken
             dispatch_actions = []       # add in dispatch actions to update env
             drivers_to_store = []
@@ -155,31 +181,34 @@ if __name__ == '__main__':
                     orders.append(Order(None, loc, nei_grid, env.city_time,
                                         reposition_duration, price=0))
                 if len(orders):
-                    actions = [[grid_map[o.get_begin_position_id()],
-                                grid_map[o.get_end_position_id()]] for o in orders]
-                    aid = dqn.choose_action([grid_map[loc.get_node_index()], time], actions, epsilon)
+                    actions = [grid_map[o.get_begin_position_id()] + grid_map[o.get_end_position_id()] for o in orders]
+                    aid = dqn.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions, epsilon)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
                     dispatch_actions.append([loc.get_node_index(), driver, orders[aid].get_begin_position_id(),
                                              orders[aid].order_id, orders[aid]])
                     if driver in busy_drivers.keys():  # means it has just finished previous order and become idle again
-                        _s = [grid_map[loc.get_node_index()], time]
+                        _s = grid_map[loc.get_node_index()] + get_time_one_hot(time)
                         _a = dqn.choose_action_max(_s, actions)
                         # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc.get_node_index()], time])
                         ps, pa, pr = busy_drivers[driver]
                         dqn.store_transition(ps, pa, pr, _s, _a, False)
-                    busy_drivers[driver] = [[grid_map[loc.get_node_index()], time], a]
+                    busy_drivers[driver] = [grid_map[loc.get_node_index()] + get_time_one_hot(time), a]
             states, r_, info = env.step(dispatch_actions)
             for driver in r_.keys():
                 assert driver in busy_drivers
                 busy_drivers[driver].append(r_[driver])
                 episode_reward += r_[driver]
-            if dqn.memory_counter > MEMORY_CAPACITY:
-                dqn.learn()
+            # if dqn.memory_counter > MEMORY_CAPACITY:
+            #     dqn.learn()
         print("Episode: ", episode)
         print("Total number of actions inside episode: ", count)
         print("Episode reward", episode_reward)
         print("Response rate", 1 - env.expired_order / env.n_orders)
 
+        torch.save(dqn.eval_net.state_dict(), directory + "/eval_net")
+        torch.save(dqn.target_net.state_dict(), directory + "/target_net")
 
 
+
+git

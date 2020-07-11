@@ -160,12 +160,12 @@ class Node(object):
 class Driver(object):
     __slots__ = ("online", "onservice", 'order', 'node', 'city_time', '_driver_id', 'offline_time', 'coordinate', 'pick_up_duration')
 
-    def __init__(self, driver_id, offline_time):
+    def __init__(self, driver_id, city_time, offline_time):
         self.online = True
         self.onservice = False
         self.order = None     # the order this driver is serving
         self.node = None      # the node that contain this driver.
-        self.city_time = 0  # track the current system time
+        self.city_time = city_time  # track the current system time
         self.offline_time = offline_time  # record the offline time of the driver
         self.coordinate = None
         self.pick_up_duration = 0

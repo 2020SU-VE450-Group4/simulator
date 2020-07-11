@@ -415,7 +415,7 @@ class CityReal:
                 added_driver_id = n_total_drivers + new_driver_count
                 new_driver_count += 1
                 online_duration = np.random.choice(range(1, len(self.working_time_dist)+1), p=self.working_time_dist) * 1000
-                self.drivers[added_driver_id] = Driver(added_driver_id, self.city_time+online_duration)
+                self.drivers[added_driver_id] = Driver(added_driver_id, self.city_time, self.city_time+online_duration)
                 self.drivers[added_driver_id].set_position(self.grids[grid_id])
                 self.grids[grid_id].add_driver(added_driver_id, self.drivers[added_driver_id])
         self.n_drivers += new_driver_count
