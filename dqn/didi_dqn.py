@@ -21,7 +21,6 @@ EPSILON_START = 0
 EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.95                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
-<<<<<<< HEAD
 MEMORY_CAPACITY = 10000
 NUM_GRIDS = 1322
 NUM_TIME_INTERVAL = 48
@@ -42,11 +41,6 @@ def get_time_one_hot(t):
     tmp[idx] = 1
     return tmp
 
-=======
-MEMORY_CAPACITY = 100000
-DIM_STATE = 2
-DIM_ACTION = 2
->>>>>>> e8580a1d85d477c83a5167c1655ddea9244caa43
 
 env = create_city()
 grid_map = {id: get_grid_one_hot(i) for i, id in enumerate(env.grid_ids)}
@@ -162,7 +156,6 @@ if __name__ == '__main__':
         start_time = env.city_time
 
         episode_reward = 0
-<<<<<<< HEAD
         busy_drivers = {}
         # driver: [loc, time, action, reward, _loc, _time, _action]
         #   --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
@@ -172,12 +165,7 @@ if __name__ == '__main__':
             count += 1
             if epsilon < EPSILON_END:
                 epsilon += EPSILON_STEP
-=======
-        busy_drivers = {}  # driver: [loc, time, action, reward, _loc, _time, _action]  --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
-        count = 0
-        while env.city_time < end_time:
-            if epsilon < EPSILON_END: epsilon += EPSILON_STEP
->>>>>>> e8580a1d85d477c83a5167c1655ddea9244caa43
+
             dispatched_orders = set()   # track orders that are taken
             dispatch_actions = []       # add in dispatch actions to update env
             drivers_to_store = []
@@ -223,6 +211,3 @@ if __name__ == '__main__':
         torch.save(dqn.eval_net.state_dict(), directory + "/eval_net")
         torch.save(dqn.target_net.state_dict(), directory + "/target_net")
 
-
-
-git
