@@ -124,7 +124,10 @@ class Node(object):
         for driver_id in keys:
             driver = self.drivers[driver_id]
             if driver.offline_time < city_time:
+                assert driver.online is True
+                assert driver.onservice is False
                 self.drivers.pop(driver_id)
+        self.offline_driver_num += 1
 
 
     def remove_driver(self, driver_id):
@@ -202,11 +205,11 @@ class Driver(object):
     def set_city_time(self, city_time):
         self.city_time = city_time
 
-    def set_offline(self):
-        assert self.onservice is False and self.online is True
-        self.online = False
-        self.node.idle_driver_num -= 1
-        self.node.offline_driver_num += 1
+    # def set_offline(self):
+    #     assert self.onservice is False and self.online is True
+    #     self.online = False
+    #     self.node.idle_driver_num -= 1
+    #     self.node.offline_driver_num += 1
 
     def set_online(self):
         assert self.onservice is False
