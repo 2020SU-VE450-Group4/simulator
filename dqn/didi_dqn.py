@@ -26,6 +26,7 @@ NUM_GRIDS = 1322
 NUM_TIME_INTERVAL = 48
 DIM_STATE = NUM_GRIDS + NUM_TIME_INTERVAL
 DIM_ACTION = 2 * NUM_GRIDS
+TARGET_DRIVER_ID = 481
 directory = os.path.dirname(__file__)
 
 
@@ -163,6 +164,7 @@ if __name__ == '__main__':
         count = 0
         while env.city_time < end_time:
             # For check use.
+            ##############################################################################################################
             print("Episode is: " + str(episode))
             print("city time is: " + str(env.city_time))
             print("Begin to check all drivers in grids.")
@@ -170,6 +172,7 @@ if __name__ == '__main__':
             print("Begin to check all idle drivers in grids.")
             env.check_idle_drivers_in_grids()
             print("end one cycle")
+            ##############################################################################################################
 
             count += 1
             if epsilon < EPSILON_END:
@@ -179,6 +182,12 @@ if __name__ == '__main__':
             dispatch_actions = []       # add in dispatch actions to update env
             drivers_to_store = []
             for driver, [(loc, time), orders, drivers] in states.items():
+                # For check use.
+                ##############################################################################################################
+                if driver == TARGET_DRIVER_ID:
+                    target_driver_start = loc.get_node_index()
+                    print("The start node id of the target driver is %s." % target_driver_start)
+                ##############################################################################################################
                 count += 1
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
@@ -196,6 +205,15 @@ if __name__ == '__main__':
                     aid = dqn.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions, epsilon)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
+
+                    # For check use.
+                    ##############################################################################################################
+                    if driver == TARGET_DRIVER_ID:
+                        # Get unique node id
+                        target_driver_order_end = orders[aid].get_end_position_id()
+                        print("The end node id of the order taken by the target driver is %s." % target_driver_order_end)
+                    ##############################################################################################################
+
                     dispatch_actions.append([loc.get_node_index(), driver, orders[aid].get_begin_position_id(),
                                              orders[aid].order_id, orders[aid]])
                     if driver in busy_drivers.keys():  # means it has just finished previous order and become idle again
