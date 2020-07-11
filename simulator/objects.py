@@ -128,7 +128,7 @@ class Node(object):
 
 
     def remove_driver(self, driver_id):
-        """ Remove the orders that are dispatched to drivers """
+        """ Remove dispatched drivers """
         removed_driver = self.drivers.pop(driver_id, None)
         self.idle_driver_num -= 1
         if removed_driver is None:
@@ -222,7 +222,6 @@ class Driver(object):
         assert self.online is True
         self.set_order_start(order)
         self.onservice = True
-        self.node.idle_driver_num -= 1
 
     def status_control_eachtime(self, city):
 
@@ -261,6 +260,9 @@ class Order(object):
     def get_begin_position(self):
         return self._begin_p
 
+    def set_begin_position(self, grid):
+        self._begin_p = grid
+
     def get_begin_coordinate(self):
         return self._begin_coordinate
 
@@ -269,6 +271,9 @@ class Order(object):
 
     def get_end_position(self):
         return self._end_p
+
+    def set_end_position(self, grid):
+        self._end_p = grid
 
     def get_end_position_id(self):
         return self._end_p.get_node_index()
@@ -288,8 +293,14 @@ class Order(object):
     def get_duration(self):
         return self._t
 
+    def set_duration(self, new_duration):
+        self._t = new_duration
+
     def get_price(self):
         return self._p
+
+    def set_price(self, p):
+        self._p = p
 
     def get_wait_time(self):
         return self._waiting_time
