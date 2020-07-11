@@ -90,7 +90,7 @@ class CityReal:
 
         self.drivers = {}  # driver[driver_id] = driver_instance, driver_id start from 0
         self.onservice_drivers = {}
-        self.n_drivers = 0  # total idle number of drivers. online and not on service.
+        self.n_drivers = 0  # total number of drivers
         self.n_offline_drivers = 0  # total number of offline drivers.
         self.init_idle_driver = init_idle_driver
         self.working_time_dist = working_time_dist

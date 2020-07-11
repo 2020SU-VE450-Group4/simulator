@@ -127,7 +127,7 @@ class Node(object):
                 assert driver.online is True
                 assert driver.onservice is False
                 self.drivers.pop(driver_id)
-        self.offline_driver_num += 1
+                self.offline_driver_num += 1
 
 
     def remove_driver(self, driver_id):
