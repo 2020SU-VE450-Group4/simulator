@@ -112,7 +112,6 @@ class Node(object):
             assert driver.onservice is False
         return self.drivers
 
-
     def set_neighbours(self, nodes_list):
         self.neighbours = nodes_list
 
@@ -128,7 +127,6 @@ class Node(object):
                 assert driver.onservice is False
                 self.drivers.pop(driver_id)
                 self.offline_driver_num += 1
-
 
     def remove_driver(self, driver_id):
         """ Remove dispatched drivers """
@@ -153,7 +151,6 @@ class Node(object):
                 self.orders.pop(order_id)
                 count += 1
         return count
-
 
     def remove_dispatched_order(self, order_id):
         """ Remove the orders that are dispatched to drivers """

@@ -97,25 +97,34 @@ class CityReal:
 
         self.real_orders = real_orders
 
-
         self.p = probability   # sample probability
 
         self.day_orders = []  # one day's order.
 
-
     # For check use.
-    def check_drivers_in_grids(self):
+    def check_all_drivers_in_grids(self):
+        num_idle_drivers = 0
+        num_offline_drivers = 0
+        num_onservice_drivers = 0
         for grid_id, grid in self.grids.items():
-            num_idle_drivers = grid.idle_driver_num
-            num_offline_drivers = grid.offline_driver_num
-            num_onservice_drivers = len(self.onservice_drivers)
-            sum_ = num_idle_drivers + num_offline_drivers + num_onservice_drivers
+            num_idle_drivers += grid.idle_driver_num
+            num_offline_drivers += grid.offline_driver_num
+            num_onservice_drivers += len(self.onservice_drivers)
 
-            num_total_drivers = self.n_drivers
-            if sum_ != num_total_drivers:
-                print("In the grid %s, sum_ = %d, num_total_drivers = %d." % (grid_id, sum_, num_total_drivers))
+        sum_ = num_idle_drivers + num_offline_drivers + num_onservice_drivers
+        num_total_drivers = self.n_drivers
+        if sum_ != num_total_drivers:
+            print("sum_ = %d, num_total_drivers = %d." % (sum_, num_total_drivers))
+            # print("In the grid %s, sum_ = %d, num_total_drivers = %d." % (grid_id, sum_, num_total_drivers))
 
-
+    def check_idle_drivers_in_grids(self):
+        flag = True
+        for grid_id, grid in self.grids.items():
+            if grid.idle_driver_num != len(grid.drivers):
+                flag = False
+                print("In the grid %s, idle_driver_num = %d, but length of drivers is %d." %(grid_id, grid.idle_driver_num, len(grid.drivers)))
+        if flag:
+            print("The idle driver in each grid is correct now.")
 
     def get_observation(self):
         next_state = np.zeros((2, self.n_grids))   # 原来的代码像CNN一样活着，我们就暂时不必了，我们直接铺开。。。不用geographical info了

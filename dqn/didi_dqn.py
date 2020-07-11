@@ -163,7 +163,13 @@ if __name__ == '__main__':
         count = 0
         while env.city_time < end_time:
             # For check use.
-            env.check_drivers_in_grids()
+            print("Episode is: " + str(episode))
+            print("city time is: " + str(env.city_time))
+            print("Begin to check all drivers in grids.")
+            env.check_all_drivers_in_grids()
+            print("Begin to check all idle drivers in grids.")
+            env.check_idle_drivers_in_grids()
+            print("end one cycle")
 
             count += 1
             if epsilon < EPSILON_END:
