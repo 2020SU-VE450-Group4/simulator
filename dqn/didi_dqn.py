@@ -76,9 +76,9 @@ class Net(nn.Module):
 
 class DQN(object):
     def __init__(self, dim_states, dim_action):
-        self.eval_net, self.target_net = Net(dim_states+dim_action, 1), Net(dim_action+dim_action, 1)
-        self.eval_net.load_state_dict(torch.load(directory + "/eval_net"))
-        self.target_net.load_state_dict(torch.load(directory + "/target_net"))
+        self.eval_net, self.target_net = Net(dim_states+dim_action, 1), Net(dim_states+dim_action, 1)
+        # self.eval_net.load_state_dict(torch.load(directory + "/eval_net"))
+        # self.target_net.load_state_dict(torch.load(directory + "/target_net"))
 
         self.learn_step_counter = 0                                     # for target updating
         self.memory_counter = 0                                         # for storing memory
@@ -201,13 +201,15 @@ if __name__ == '__main__':
                 assert driver in busy_drivers
                 busy_drivers[driver].append(r_[driver])
                 episode_reward += r_[driver]
-            # if dqn.memory_counter > MEMORY_CAPACITY:
-            #     dqn.learn()
+
+            if dqn.memory_counter > MEMORY_CAPACITY:
+                dqn.learn()
         print("Episode: ", episode)
+        print()
         print("Total number of actions inside episode: ", count)
         print("Episode reward", episode_reward)
         print("Response rate", 1 - env.expired_order / env.n_orders)
 
-        torch.save(dqn.eval_net.state_dict(), directory + "/eval_net")
-        torch.save(dqn.target_net.state_dict(), directory + "/target_net")
+        # torch.save(dqn.eval_net.state_dict(), directory + "/eval_net")
+        # torch.save(dqn.target_net.state_dict(), directory + "/target_net")
 

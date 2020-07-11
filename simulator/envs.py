@@ -259,7 +259,7 @@ class CityReal:
         keys = list(self.onservice_drivers.keys())
         for driver_id in keys:
             driver = self.onservice_drivers[driver_id]
-            # assert driver.city_time == self.city_time
+            assert driver.city_time == self.city_time
             assert driver.onservice is True
             assert driver.online is True
             order_end_time = driver.order.get_assigned_time() + driver.order.get_duration()
@@ -338,7 +338,6 @@ class CityReal:
 
     def step_dispatch(self, dispatch_actions):
         """ Execute dispatch actions
-        TODO: define pickup process since driver may be in a different grid from the order
         :param dispatch_actions: in the form of (driver_grid_id, driver_id, order_grid_id, order_id, order)
                                  if the order is an idle action or a reposition action,
                                     order_id is None, and order object is used to specify the destination (an self-created order object!)
@@ -389,7 +388,7 @@ class CityReal:
         return reward
 
     def step_increase_city_time(self):
-        self.city_time += 2
+        self.city_time += 60
         # set city time of drivers
         for driver_id, driver in self.drivers.items():
             driver.set_city_time(self.city_time)
