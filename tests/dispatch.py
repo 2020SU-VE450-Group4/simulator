@@ -29,7 +29,7 @@ def get_dispatch_observ(s, num_sample):
     return dispatch_observ, driver_dict, order_dict
 
 
-def dispatch(s, num_sample=2):
+def dispatch(s, num_sample=1):
     """
     State input given by get_observation_verbose
     """
@@ -47,7 +47,7 @@ def dispatch(s, num_sample=2):
 def order_driver_bigraph(orders, drivers, dispatch_observ, num_sample):
     for o in orders:
         # TODO: sample more drivers
-        sample_num = min(num_sample, len(drivers))
+        sample_num = num_sample * len(drivers)
         for d in sample(drivers, sample_num):
             pair = {}
             pair['order_id'] = o.order_id
@@ -107,9 +107,9 @@ def print_state(s):
             (loc, time), orders, drivers = state
             print("Orders/ Drivers from Grid ", grid_id)
             # ("Driver:", self._driver_id, self.node.get_node_index(), self.online, self.onservice, self.offline_time)
-            for o in orders:
-                o.print_order()
-                break
+            # for o in orders:
+            #    o.print_order()
+            #    break
             # ("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
             #for d in drivers:
             #    d.print_driver()
@@ -148,9 +148,9 @@ def main():
         real_order_list = pickle.load(pk)
 
     parser = argparse.ArgumentParser(description='Planning and Learning dispatch')
-    parser.add_argument('--value', type=str, default="V0104mean.pkl",
+    parser.add_argument('--value', type=str, default="V.pkl",
                         help='state value *.pkl') 
-    parser.add_argument('--sample', type=int, default=2, 
+    parser.add_argument('--sample', type=int, default=1, 
                         help='number of sample drivers for km') 
     args = parser.parse_args()
     with open(args.value, "rb") as pk:
@@ -181,7 +181,7 @@ def main():
             print(reward)
             print(reward, file=fnew_out)
             s = s_ 
-            # print_state(s) 
+            print_state(s) 
             if isinstance(reward, dict):
                 global_reward = myCity.get_global_reward(reward)
                 episode_reward += global_reward
