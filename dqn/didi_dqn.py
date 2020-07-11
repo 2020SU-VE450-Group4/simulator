@@ -12,13 +12,15 @@ from simulator.objects import Order
 # print(os.getcwd())
 
 # Hyper Parameters
+TOTAL_STEPS = 100000
 BATCH_SIZE = 256
 LR = 0.0001                   # learning rate
-EPSILON = 0.9               # greedy policy
-# TODO: modify the constant epsilon
+EPSILON_END = 0.95             # greedy policy
+EPSILON_START = 0
+EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.95                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
-MEMORY_CAPACITY = 5000
+MEMORY_CAPACITY = 10000
 DIM_STATE = 2
 DIM_ACTION = 2
 
@@ -64,12 +66,12 @@ class DQN(object):
         self.optimizer = torch.optim.Adam(self.eval_net.parameters(), lr=LR)
         self.loss_func = nn.MSELoss()
 
-    def choose_action(self, _s, _actions):
+    def choose_action(self, _s, _actions, epsilon):
         values = []
         for a in _actions:
             x = torch.unsqueeze(torch.tensor(np.append(_s, a), dtype=torch.float), 0)  # add dimension at 0
             values.append(self.eval_net.forward(x).data.numpy().flatten()[0])
-        if np.random.uniform() < EPSILON:  # greedy
+        if np.random.uniform() < epsilon:  # greedy
             _a = np.argmax(values)
         else:  # random
             _a = random.randint(0, len(_actions)-1)
@@ -126,19 +128,22 @@ if __name__ == '__main__':
 
     print("Start training")
 
-    for episode in range(10000):
+    epsilon = EPSILON_START
+    for episode in range(100):
         # dicts of current active {drivers: [(loc, time), orders, neighbours]}
         states = env.reset_clean(city_time="2016/11/01 10:00:00")
         episode_reward = 0
         busy_drivers = {}  # driver: [loc, time, action, reward, _loc, _time, _action]  --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
 
+        count = 0
         while env.city_time < end_time:
+            count += 1
+            if epsilon < EPSILON_END: epsilon += EPSILON_STEP
             dispatched_orders = set()   # track orders that are taken
             dispatch_actions = []       # add in dispatch actions to update env
             drivers_to_store = []
             for driver, [(loc, time), orders, drivers] in states.items():
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
-                # TODO: add other possible actions: like reposition and stay idle
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
                 orders.append(idle_order)
                 neighbours = loc.neighbours[0]
@@ -149,12 +154,10 @@ if __name__ == '__main__':
                         reposition_duration = env.transition_trip_time_dict[loc.get_node_index()][nei_grid.get_node_index()][0]
                     orders.append(Order(None, loc, nei_grid, env.city_time,
                                         reposition_duration, price=0))
-                # orders.append()  # generate new virtual orders (idle/reposition actions)
-
                 if len(orders):
                     actions = [[grid_map[o.get_begin_position_id()],
                                 grid_map[o.get_end_position_id()]] for o in orders]
-                    aid = dqn.choose_action([grid_map[loc.get_node_index()], time], actions)
+                    aid = dqn.choose_action([grid_map[loc.get_node_index()], time], actions, epsilon)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
                     dispatch_actions.append([loc.get_node_index(), driver, orders[aid].get_begin_position_id(),
@@ -173,7 +176,8 @@ if __name__ == '__main__':
                 episode_reward += r_[driver]
             if dqn.memory_counter > MEMORY_CAPACITY:
                 dqn.learn()
-
+        print("Episode: ", episode)
+        print("Total number of actions inside episode: ", count)
         print("Episode reward", episode_reward)
         print("Response rate", 1 - env.expired_order / env.n_orders)
 
