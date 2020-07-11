@@ -47,7 +47,7 @@ def dispatch(s, num_sample=1):
 def order_driver_bigraph(orders, drivers, dispatch_observ, num_sample):
     for o in orders:
         # TODO: sample more drivers
-        sample_num = num_sample * len(drivers)
+        sample_num = int( num_sample * len(drivers))
         for d in sample(drivers, sample_num):
             pair = {}
             pair['order_id'] = o.order_id
