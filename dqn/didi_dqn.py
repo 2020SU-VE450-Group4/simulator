@@ -162,6 +162,9 @@ if __name__ == '__main__':
 
         count = 0
         while env.city_time < end_time:
+            # For check use.
+            env.check_drivers_in_grids()
+
             count += 1
             if epsilon < EPSILON_END:
                 epsilon += EPSILON_STEP

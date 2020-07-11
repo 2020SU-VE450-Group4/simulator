@@ -102,6 +102,21 @@ class CityReal:
 
         self.day_orders = []  # one day's order.
 
+
+    # For check use.
+    def check_drivers_in_grids(self):
+        for grid_id, grid in self.grids.items():
+            num_idle_drivers = grid.idle_driver_num
+            num_offline_drivers = grid.offline_driver_num
+            num_onservice_drivers = len(self.onservice_drivers)
+            sum_ = num_idle_drivers + num_offline_drivers + num_onservice_drivers
+
+            num_total_drivers = self.n_drivers
+            if sum_ != num_total_drivers:
+                print("In the grid %s, sum_ = %d, num_total_drivers = %d." % (grid_id, sum_, num_total_drivers))
+
+
+
     def get_observation(self):
         next_state = np.zeros((2, self.n_grids))   # 原来的代码像CNN一样活着，我们就暂时不必了，我们直接铺开。。。不用geographical info了
         for idx, grid_id in enumerate(self.grid_ids):
