@@ -340,9 +340,8 @@ class CityReal:
         """ Execute dispatch actions
         TODO: define pickup process since driver may be in a different grid from the order
         :param dispatch_actions: in the form of (driver_grid_id, driver_id, order_grid_id, order_id, order)
-                                 if the order is a real order, we only specify order_grid_id and order_id, and order is None
                                  if the order is an idle action or a reposition action,
-                                    order_grid_id and order_id are None, and order is used to specify the destination (an self-created order object!)
+                                    order_id is None, and order object is used to specify the destination (an self-created order object!)
         """
         dispatched_drivers = []
         for action in dispatch_actions:
@@ -355,18 +354,30 @@ class CityReal:
                 raise ValueError('Step_dispatch: Dispatched a driver not in the grid')
             driver = driver_grid.drivers[driver_id]
 
-            if order is not None:  # the case of idle or reposition
-                order_grid = order.get_begin_position()
-                # assert order_grid == driver_grid
-            else:  # it is a real order inside the simulator
-                if order_grid_id not in self.grids:
-                    raise ValueError('Step_dispatch: Order grid id error')
-                order_grid = self.grids[order_grid_id]
-                if order_id not in order_grid.orders:
-                    raise ValueError('Step_dispatch: Assigned order does not exist in the grid')
-                order = order_grid.orders[order_id]
+            if order_grid_id not in self.grids:
+                raise ValueError('Step_dispatch: Order grid id error')
+            order_grid = self.grids[order_grid_id]
+            if order_id is not None and order_id not in order_grid.orders:  # if order_id is None, it is idle or reposition action
+                raise ValueError('Step_dispatch: Assigned order does not exist in the grid')
+            elif order_id is not None:
+                order_ = order_grid.orders[order_id]
+                assert order_ == order
 
-            driver.take_order(order)
+            # deal with pick-up process
+            if driver_grid_id != order_grid_id:
+                original_duration = order.get_duration()
+                pickup_duration = 180
+                if driver_grid_id in self.transition_trip_time_dict and \
+                        order_grid_id in self.transition_trip_time_dict[driver_grid_id]:
+                    pickup_duration = self.transition_trip_time_dict[driver_grid_id][order_grid_id][0]
+                order.set_duration(original_duration + pickup_duration)
+            # deal with order cancellation
+            if order_id is not None and np.random.uniform() < 0.05783:  # the passenger cancel the order
+                order.set_duration(0)
+                order.set_begin_position(driver_grid)
+                order.set_end_position(driver_grid)
+                order.set_price(0)
+            driver.take_order(order)  # take order normally
             dispatched_drivers.append(driver)
             order.set_assigned_time(self.city_time)
             self.onservice_drivers[driver_id] = driver

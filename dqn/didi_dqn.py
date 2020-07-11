@@ -12,7 +12,7 @@ from simulator.objects import Order
 # print(os.getcwd())
 
 # Hyper Parameters
-TOTAL_STEPS = 100000
+TOTAL_STEPS = 800000
 BATCH_SIZE = 256
 LR = 0.0001                   # learning rate
 EPSILON_END = 0.95             # greedy policy
@@ -137,12 +137,12 @@ if __name__ == '__main__':
 
         count = 0
         while env.city_time < end_time:
-            count += 1
             if epsilon < EPSILON_END: epsilon += EPSILON_STEP
             dispatched_orders = set()   # track orders that are taken
             dispatch_actions = []       # add in dispatch actions to update env
             drivers_to_store = []
             for driver, [(loc, time), orders, drivers] in states.items():
+                count += 1
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
                 orders.append(idle_order)
