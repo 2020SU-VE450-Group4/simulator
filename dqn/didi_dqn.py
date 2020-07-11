@@ -12,15 +12,15 @@ from simulator.objects import Order
 # print(os.getcwd())
 
 # Hyper Parameters
-TOTAL_STEPS = 800000
-BATCH_SIZE = 256
+TOTAL_STEPS = 100000
+BATCH_SIZE = 1024
 LR = 0.0001                   # learning rate
 EPSILON_END = 0.95             # greedy policy
 EPSILON_START = 0
 EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.95                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
-MEMORY_CAPACITY = 10000
+MEMORY_CAPACITY = 100000
 DIM_STATE = 2
 DIM_ACTION = 2
 
@@ -134,7 +134,6 @@ if __name__ == '__main__':
         states = env.reset_clean(city_time="2016/11/01 10:00:00")
         episode_reward = 0
         busy_drivers = {}  # driver: [loc, time, action, reward, _loc, _time, _action]  --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
-
         count = 0
         while env.city_time < end_time:
             if epsilon < EPSILON_END: epsilon += EPSILON_STEP
