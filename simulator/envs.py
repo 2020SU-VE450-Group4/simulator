@@ -388,7 +388,7 @@ class CityReal:
         return reward
 
     def step_increase_city_time(self):
-        self.city_time += 60
+        self.city_time += 2
         # set city time of drivers
         for driver_id, driver in self.drivers.items():
             driver.set_city_time(self.city_time)
