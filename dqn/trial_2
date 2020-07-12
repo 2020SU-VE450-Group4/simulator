@@ -1,4 +1,4 @@
-1/10 driver, 1/10 orders, all real data in 20161101, (use real order) no variation between different episodes
+1/10 driver (has bug...), 1/10 orders, all real data in 20161101, (use real order) no variation between different episodes
 TOTAL_STEPS = 200000
 BATCH_SIZE = 1024
 LR = 0.0001                   # learning rate
@@ -8,6 +8,8 @@ EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.9                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
 MEMORY_CAPACITY = 100000
+
+10:00:00 -- 13:59:58
 
 Episode:  0
 Epsilon 0.03419525000000243
@@ -239,3 +241,23 @@ Epsilon 0.9500047499995805
 Total number of actions inside episode:  8711
 Episode reward 5935.8200000000015
 Response rate 0.7738674884437596
+Episode:  46
+Epsilon 0.9500047499995805
+Total number of actions inside episode:  8649
+Episode reward 5694.7999999999965
+Response rate 0.7715254237288136
+Episode:  47
+Epsilon 0.9500047499995805
+Total number of actions inside episode:  8732
+Episode reward 5923.689999999997
+Response rate 0.7736209553158706
+Episode:  48
+Epsilon 0.9500047499995805
+Total number of actions inside episode:  8656
+Episode reward 5615.269999999993
+Response rate 0.7692449922958398
+Episode:  49
+Epsilon 0.9500047499995805
+Total number of actions inside episode:  8584
+Episode reward 5492.3099999999995
+Response rate 0.7692449922958398
