@@ -1,0 +1,45 @@
+Start training
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is 85a523dfa4436ef0.
+The start node id of the target driver is da136e81830381eb.
+Error in driver location.
+The end node id of the order taken by the target driver is 942da3b21cde186b.
+The start node id of the target driver is 942da3b21cde186b.
+Pass
+The end node id of the order taken by the target driver is 3dc3a0d7bd9f272c.
+The start node id of the target driver is 3dc3a0d7bd9f272c.
+Pass
+The end node id of the order taken by the target driver is e865f2ccb30a67d1.
+The start node id of the target driver is e865f2ccb30a67d1.
+Pass
+The end node id of the order taken by the target driver is 8f589348ea437b40.
+The start node id of the target driver is 8f589348ea437b40.
+Pass
+The end node id of the order taken by the target driver is ae7ae45ff494d2d8.
+The start node id of the target driver is ae7ae45ff494d2d8.
+Pass
+The end node id of the order taken by the target driver is 88832a801096a80c.
+The start node id of the target driver is 88832a801096a80c.
+Pass
+The end node id of the order taken by the target driver is 8ea3880ce46c719c.
+The start node id of the target driver is 8ea3880ce46c719c.
+Pass
+The end node id of the order taken by the target driver is 9455dd488064433a.
+The start node id of the target driver is 9455dd488064433a.
+Pass
+The end node id of the order taken by the target driver is 3cfbcf80c4f5a871.
+Episode:  0
+Epsilon 0.02564049999999969
+Total number of actions inside episode:  23416
+Episode reward 3574.4206410383586
+Response rate 0.8059135708870356
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 97243677f83bd758.
+The start node id of the target driver is 97243677f83bd758.
+Pass
+The end node id of the order taken by the target driver is 4b6f2ddd673db412.

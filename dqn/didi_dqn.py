@@ -162,16 +162,17 @@ if __name__ == '__main__':
         #   --> ?: may have or may not, used to wait for collecting information to be inserted into the memory
 
         count = 0
+        last_end_node_id = ''
         while env.city_time < end_time:
             # For check use.
             ##############################################################################################################
-            print("Episode is: " + str(episode))
-            print("city time is: " + str(env.city_time))
-            print("Begin to check all drivers in grids.")
-            env.check_all_drivers_in_grids()
-            print("Begin to check all idle drivers in grids.")
-            env.check_idle_drivers_in_grids()
-            print("end one cycle")
+            # print("Episode is: " + str(episode))
+            # print("city time is: " + str(env.city_time))
+            # print("Begin to check all drivers in grids.")
+            # env.check_all_drivers_in_grids()
+            # print("Begin to check all idle drivers in grids.")
+            # env.check_idle_drivers_in_grids()
+            # print("end one cycle")
             ##############################################################################################################
 
             count += 1
@@ -187,6 +188,11 @@ if __name__ == '__main__':
                 if driver == TARGET_DRIVER_ID:
                     target_driver_start = loc.get_node_index()
                     print("The start node id of the target driver is %s." % target_driver_start)
+                    if not last_end_node_id or last_end_node_id == target_driver_start:
+                        print("Pass")
+                    else:
+                        print("Error in driver location.")
+
                 ##############################################################################################################
                 count += 1
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
@@ -211,6 +217,7 @@ if __name__ == '__main__':
                     if driver == TARGET_DRIVER_ID:
                         # Get unique node id
                         target_driver_order_end = orders[aid].get_end_position_id()
+                        last_end_node_id = target_driver_order_end
                         print("The end node id of the order taken by the target driver is %s." % target_driver_order_end)
                     ##############################################################################################################
 
