@@ -1,45 +1,1044 @@
 Start training
 The start node id of the target driver is 310c5bac13100430.
 Pass
-The end node id of the order taken by the target driver is da136e81830381eb.
-The start node id of the target driver is da136e81830381eb.
+The end node id of the order taken by the target driver is 5bc416b12315fec4.
+The order is cancelled and its driver id is: 1245.
+The start node id of the target driver is 5bc416b12315fec4.
 Pass
-The end node id of the order taken by the target driver is 85a523dfa4436ef0.
-The start node id of the target driver is da136e81830381eb.
-Error in driver location.
-The end node id of the order taken by the target driver is 942da3b21cde186b.
-The start node id of the target driver is 942da3b21cde186b.
+The end node id of the order taken by the target driver is 090d68df506b9670.
+The order is cancelled and its driver id is: 1676.
+The order is cancelled and its driver id is: 2055.
+The order is cancelled and its driver id is: 1323.
+The order is cancelled and its driver id is: 584.
+The order is cancelled and its driver id is: 963.
+The order is cancelled and its driver id is: 1274.
+The order is cancelled and its driver id is: 1240.
+The order is cancelled and its driver id is: 1275.
+The order is cancelled and its driver id is: 632.
+The order is cancelled and its driver id is: 671.
+The order is cancelled and its driver id is: 1689.
+The order is cancelled and its driver id is: 1726.
+The order is cancelled and its driver id is: 1224.
+The order is cancelled and its driver id is: 396.
+The order is cancelled and its driver id is: 403.
+The order is cancelled and its driver id is: 1117.
+The order is cancelled and its driver id is: 1157.
+The order is cancelled and its driver id is: 328.
+The order is cancelled and its driver id is: 404.
+The order is cancelled and its driver id is: 1590.
+The order is cancelled and its driver id is: 1655.
+The order is cancelled and its driver id is: 495.
+The order is cancelled and its driver id is: 500.
+The order is cancelled and its driver id is: 1569.
+The order is cancelled and its driver id is: 1606.
+The order is cancelled and its driver id is: 2009.
+The order is cancelled and its driver id is: 881.
+The order is cancelled and its driver id is: 893.
+The order is cancelled and its driver id is: 926.
+The order is cancelled and its driver id is: 1434.
+The order is cancelled and its driver id is: 861.
+The order is cancelled and its driver id is: 878.
+The order is cancelled and its driver id is: 754.
+The order is cancelled and its driver id is: 1577.
+The order is cancelled and its driver id is: 1598.
+The order is cancelled and its driver id is: 545.
+The order is cancelled and its driver id is: 1255.
+The order is cancelled and its driver id is: 1543.
+The order is cancelled and its driver id is: 494.
+The order is cancelled and its driver id is: 2035.
+The order is cancelled and its driver id is: 715.
+The order is cancelled and its driver id is: 727.
+The order is cancelled and its driver id is: 651.
+The order is cancelled and its driver id is: 1316.
+The order is cancelled and its driver id is: 1219.
+The order is cancelled and its driver id is: 140.
+The order is cancelled and its driver id is: 176.
+The order is cancelled and its driver id is: 1260.
+The order is cancelled and its driver id is: 1280.
+The order is cancelled and its driver id is: 1280.
+The order is cancelled and its driver id is: 879.
+The order is cancelled and its driver id is: 1023.
+The order is cancelled and its driver id is: 110.
+The order is cancelled and its driver id is: 1512.
+The order is cancelled and its driver id is: 1114.
+The order is cancelled and its driver id is: 1114.
+The order is cancelled and its driver id is: 376.
+The order is cancelled and its driver id is: 284.
+The order is cancelled and its driver id is: 1850.
+The order is cancelled and its driver id is: 1248.
+The order is cancelled and its driver id is: 567.
+The order is cancelled and its driver id is: 712.
+The order is cancelled and its driver id is: 1078.
+The order is cancelled and its driver id is: 75.
+The order is cancelled and its driver id is: 1893.
+The order is cancelled and its driver id is: 86.
+The order is cancelled and its driver id is: 1021.
+The order is cancelled and its driver id is: 652.
+The order is cancelled and its driver id is: 1239.
+The order is cancelled and its driver id is: 1916.
+The order is cancelled and its driver id is: 1924.
+The start node id of the target driver is 090d68df506b9670.
 Pass
-The end node id of the order taken by the target driver is 3dc3a0d7bd9f272c.
-The start node id of the target driver is 3dc3a0d7bd9f272c.
+The end node id of the order taken by the target driver is 090d68df506b9670.
+The start node id of the target driver is 090d68df506b9670.
 Pass
-The end node id of the order taken by the target driver is e865f2ccb30a67d1.
-The start node id of the target driver is e865f2ccb30a67d1.
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
 Pass
-The end node id of the order taken by the target driver is 8f589348ea437b40.
-The start node id of the target driver is 8f589348ea437b40.
+The end node id of the order taken by the target driver is 4064efaeea8f671f.
+The start node id of the target driver is 4064efaeea8f671f.
 Pass
-The end node id of the order taken by the target driver is ae7ae45ff494d2d8.
-The start node id of the target driver is ae7ae45ff494d2d8.
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
 Pass
-The end node id of the order taken by the target driver is 88832a801096a80c.
-The start node id of the target driver is 88832a801096a80c.
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
 Pass
-The end node id of the order taken by the target driver is 8ea3880ce46c719c.
-The start node id of the target driver is 8ea3880ce46c719c.
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
 Pass
-The end node id of the order taken by the target driver is 9455dd488064433a.
-The start node id of the target driver is 9455dd488064433a.
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
 Pass
-The end node id of the order taken by the target driver is 3cfbcf80c4f5a871.
+The end node id of the order taken by the target driver is b45278d8e3dd712b.
+The start node id of the target driver is b45278d8e3dd712b.
+Pass
+The end node id of the order taken by the target driver is e8ed1ec493bc6c4e.
 Episode:  0
 Epsilon 0.02564049999999969
-Total number of actions inside episode:  23416
-Episode reward 3574.4206410383586
-Response rate 0.8059135708870356
+Total number of actions inside episode:  23348
+Episode reward 3612.109967965125
+Response rate 0.7871572871572872
 The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 73f9ea19c4c5f934.
+The order is cancelled and its driver id is: 658.
+The order is cancelled and its driver id is: 183.
+The order is cancelled and its driver id is: 1072.
+The order is cancelled and its driver id is: 989.
+The order is cancelled and its driver id is: 645.
+The order is cancelled and its driver id is: 206.
+The order is cancelled and its driver id is: 231.
+The order is cancelled and its driver id is: 225.
+The order is cancelled and its driver id is: 222.
+The order is cancelled and its driver id is: 225.
+The order is cancelled and its driver id is: 643.
+The order is cancelled and its driver id is: 1685.
+The order is cancelled and its driver id is: 1711.
+The order is cancelled and its driver id is: 1779.
+The order is cancelled and its driver id is: 1696.
+The order is cancelled and its driver id is: 436.
+The order is cancelled and its driver id is: 1619.
+The order is cancelled and its driver id is: 1996.
+The order is cancelled and its driver id is: 1118.
+The order is cancelled and its driver id is: 1132.
+The order is cancelled and its driver id is: 578.
+The order is cancelled and its driver id is: 1570.
+The order is cancelled and its driver id is: 2002.
+The order is cancelled and its driver id is: 531.
+The order is cancelled and its driver id is: 1966.
+The order is cancelled and its driver id is: 1153.
+The order is cancelled and its driver id is: 1897.
+The order is cancelled and its driver id is: 496.
+The order is cancelled and its driver id is: 910.
+The order is cancelled and its driver id is: 1439.
+The order is cancelled and its driver id is: 1386.
+The order is cancelled and its driver id is: 1423.
+The order is cancelled and its driver id is: 1458.
+The order is cancelled and its driver id is: 258.
+The order is cancelled and its driver id is: 779.
+The order is cancelled and its driver id is: 940.
+The order is cancelled and its driver id is: 406.
+The order is cancelled and its driver id is: 1297.
+The order is cancelled and its driver id is: 1984.
+The order is cancelled and its driver id is: 967.
+The order is cancelled and its driver id is: 480.
+The order is cancelled and its driver id is: 176.
+The order is cancelled and its driver id is: 155.
+The order is cancelled and its driver id is: 1260.
+The order is cancelled and its driver id is: 1160.
+The order is cancelled and its driver id is: 1811.
+The order is cancelled and its driver id is: 775.
+The order is cancelled and its driver id is: 1586.
+The order is cancelled and its driver id is: 775.
+The order is cancelled and its driver id is: 1806.
+The order is cancelled and its driver id is: 1817.
+The order is cancelled and its driver id is: 2034.
+The start node id of the target driver is 73f9ea19c4c5f934.
+Pass
+The end node id of the order taken by the target driver is 78ef0dcf2c270cd4.
+The order is cancelled and its driver id is: 76.
+The order is cancelled and its driver id is: 1519.
+The order is cancelled and its driver id is: 327.
+The order is cancelled and its driver id is: 101.
+The order is cancelled and its driver id is: 13.
+The order is cancelled and its driver id is: 1847.
+The order is cancelled and its driver id is: 1624.
+The order is cancelled and its driver id is: 1629.
+The order is cancelled and its driver id is: 1335.
+The order is cancelled and its driver id is: 1335.
+The order is cancelled and its driver id is: 1103.
+The order is cancelled and its driver id is: 1579.
+The start node id of the target driver is 78ef0dcf2c270cd4.
+Pass
+The end node id of the order taken by the target driver is d9ad8046a9cdea90.
+The start node id of the target driver is d9ad8046a9cdea90.
+Pass
+The end node id of the order taken by the target driver is d9ad8046a9cdea90.
+The start node id of the target driver is d9ad8046a9cdea90.
+Pass
+The end node id of the order taken by the target driver is fc81e949ac66438a.
+The start node id of the target driver is fc81e949ac66438a.
+Pass
+The end node id of the order taken by the target driver is fc81e949ac66438a.
+The start node id of the target driver is fc81e949ac66438a.
+Pass
+The end node id of the order taken by the target driver is 78ef0dcf2c270cd4.
+The start node id of the target driver is 78ef0dcf2c270cd4.
+Pass
+The end node id of the order taken by the target driver is 950ebd04f81cf397.
+The start node id of the target driver is 950ebd04f81cf397.
+Pass
+The end node id of the order taken by the target driver is f774f1d060bc1b68.
+The start node id of the target driver is f774f1d060bc1b68.
+Pass
+The end node id of the order taken by the target driver is 78aafeada01a51ab.
+The start node id of the target driver is 78aafeada01a51ab.
+Pass
+The end node id of the order taken by the target driver is df9c5845db03c756.
+The start node id of the target driver is df9c5845db03c756.
+Pass
+The end node id of the order taken by the target driver is 78aafeada01a51ab.
+The start node id of the target driver is 78aafeada01a51ab.
+Pass
+The end node id of the order taken by the target driver is 820535708cc56c72.
+The start node id of the target driver is 820535708cc56c72.
+Pass
+The end node id of the order taken by the target driver is 78aafeada01a51ab.
+The start node id of the target driver is 78aafeada01a51ab.
+Pass
+The end node id of the order taken by the target driver is df9c5845db03c756.
+The start node id of the target driver is df9c5845db03c756.
+Pass
+The end node id of the order taken by the target driver is 0501af87f2ae3fa2.
+Episode:  1
+Epsilon 0.05128100000000456
+Total number of actions inside episode:  23048
+Episode reward 3774.899464115885
+Response rate 0.7847025495750708
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+The order is cancelled and its driver id is: 1030.
+The order is cancelled and its driver id is: 1808.
+The order is cancelled and its driver id is: 1994.
+The order is cancelled and its driver id is: 1975.
+The order is cancelled and its driver id is: 1930.
+The order is cancelled and its driver id is: 1870.
+The order is cancelled and its driver id is: 1870.
+The order is cancelled and its driver id is: 197.
+The order is cancelled and its driver id is: 1283.
+The order is cancelled and its driver id is: 1238.
+The order is cancelled and its driver id is: 779.
+The order is cancelled and its driver id is: 673.
+The order is cancelled and its driver id is: 1681.
+The order is cancelled and its driver id is: 1708.
+The order is cancelled and its driver id is: 1320.
+The order is cancelled and its driver id is: 345.
+The order is cancelled and its driver id is: 1573.
+The order is cancelled and its driver id is: 226.
+The order is cancelled and its driver id is: 777.
+The order is cancelled and its driver id is: 250.
+The order is cancelled and its driver id is: 522.
+The order is cancelled and its driver id is: 538.
+The order is cancelled and its driver id is: 1142.
+The order is cancelled and its driver id is: 1133.
+The order is cancelled and its driver id is: 377.
+The order is cancelled and its driver id is: 370.
+The order is cancelled and its driver id is: 420.
+The order is cancelled and its driver id is: 1148.
+The order is cancelled and its driver id is: 1333.
+The order is cancelled and its driver id is: 668.
+The order is cancelled and its driver id is: 485.
+The order is cancelled and its driver id is: 248.
+The order is cancelled and its driver id is: 1868.
+The order is cancelled and its driver id is: 899.
+The order is cancelled and its driver id is: 1105.
+The start node id of the target driver is fd52ba1ac1152aee.
+Pass
+The end node id of the order taken by the target driver is 94be0752a9fa25ed.
+The order is cancelled and its driver id is: 920.
+The order is cancelled and its driver id is: 1563.
+The order is cancelled and its driver id is: 268.
+The order is cancelled and its driver id is: 1255.
+The order is cancelled and its driver id is: 268.
+The order is cancelled and its driver id is: 388.
+The order is cancelled and its driver id is: 300.
+The order is cancelled and its driver id is: 1742.
+The order is cancelled and its driver id is: 1269.
+The order is cancelled and its driver id is: 1269.
+The order is cancelled and its driver id is: 650.
+The order is cancelled and its driver id is: 792.
+The order is cancelled and its driver id is: 275.
+The order is cancelled and its driver id is: 99.
+The order is cancelled and its driver id is: 96.
+The order is cancelled and its driver id is: 1970.
+The order is cancelled and its driver id is: 1970.
+The order is cancelled and its driver id is: 1678.
+The order is cancelled and its driver id is: 1549.
+The order is cancelled and its driver id is: 2027.
+The order is cancelled and its driver id is: 1176.
+The order is cancelled and its driver id is: 13.
+The order is cancelled and its driver id is: 80.
+The order is cancelled and its driver id is: 811.
+The order is cancelled and its driver id is: 687.
+The order is cancelled and its driver id is: 1800.
+The order is cancelled and its driver id is: 1831.
+The order is cancelled and its driver id is: 1890.
+The order is cancelled and its driver id is: 1867.
+The start node id of the target driver is 94be0752a9fa25ed.
+Pass
+The end node id of the order taken by the target driver is 4e6ab406af4a842b.
+The order is cancelled and its driver id is: 352.
+The order is cancelled and its driver id is: 970.
+The order is cancelled and its driver id is: 1208.
+Episode:  2
+Epsilon 0.07692150000000093
+Total number of actions inside episode:  22908
+Episode reward 3517.582388198208
+Response rate 0.812070282658518
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 310c5bac13100430.
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The order is cancelled and its driver id is: 1243.
+The order is cancelled and its driver id is: 1837.
+The order is cancelled and its driver id is: 642.
+The order is cancelled and its driver id is: 1647.
+The order is cancelled and its driver id is: 1331.
+The order is cancelled and its driver id is: 201.
+The order is cancelled and its driver id is: 1275.
+The order is cancelled and its driver id is: 762.
+The order is cancelled and its driver id is: 1696.
+The order is cancelled and its driver id is: 295.
+The order is cancelled and its driver id is: 377.
+The order is cancelled and its driver id is: 1585.
+The order is cancelled and its driver id is: 199.
+The order is cancelled and its driver id is: 524.
+The order is cancelled and its driver id is: 332.
+The order is cancelled and its driver id is: 1247.
+The order is cancelled and its driver id is: 1929.
+The order is cancelled and its driver id is: 1579.
+The order is cancelled and its driver id is: 795.
+The order is cancelled and its driver id is: 795.
+The order is cancelled and its driver id is: 1868.
+The order is cancelled and its driver id is: 795.
+The order is cancelled and its driver id is: 694.
+The order is cancelled and its driver id is: 572.
+The order is cancelled and its driver id is: 526.
+The order is cancelled and its driver id is: 2046.
+The order is cancelled and its driver id is: 290.
+The order is cancelled and its driver id is: 717.
+The order is cancelled and its driver id is: 1760.
+The order is cancelled and its driver id is: 1877.
+The order is cancelled and its driver id is: 145.
+The order is cancelled and its driver id is: 1603.
+The order is cancelled and its driver id is: 160.
+The order is cancelled and its driver id is: 585.
+The order is cancelled and its driver id is: 1298.
+The order is cancelled and its driver id is: 296.
+The order is cancelled and its driver id is: 890.
+The order is cancelled and its driver id is: 1457.
+The order is cancelled and its driver id is: 1541.
+The order is cancelled and its driver id is: 1378.
+The order is cancelled and its driver id is: 1461.
+The order is cancelled and its driver id is: 361.
+The order is cancelled and its driver id is: 1478.
+The order is cancelled and its driver id is: 69.
+The order is cancelled and its driver id is: 69.
+The order is cancelled and its driver id is: 551.
+The order is cancelled and its driver id is: 555.
+The order is cancelled and its driver id is: 785.
+The order is cancelled and its driver id is: 1097.
+The order is cancelled and its driver id is: 1028.
+The order is cancelled and its driver id is: 1083.
+The order is cancelled and its driver id is: 730.
+The order is cancelled and its driver id is: 619.
+The order is cancelled and its driver id is: 1988.
+The order is cancelled and its driver id is: 581.
+The order is cancelled and its driver id is: 529.
+The order is cancelled and its driver id is: 534.
+The order is cancelled and its driver id is: 1691.
+The order is cancelled and its driver id is: 1242.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
+Pass
+The end node id of the order taken by the target driver is bc6ccad91a69a805.
+The start node id of the target driver is bc6ccad91a69a805.
+Pass
+The end node id of the order taken by the target driver is 090d68df506b9670.
+The start node id of the target driver is 090d68df506b9670.
+Pass
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
+Pass
+The end node id of the order taken by the target driver is d36afa5fa6d37e92.
+Episode:  3
+Epsilon 0.10256199999998912
+Total number of actions inside episode:  23213
+Episode reward 3737.093045547126
+Response rate 0.7855595667870037
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+The order is cancelled and its driver id is: 1329.
+The order is cancelled and its driver id is: 818.
+The order is cancelled and its driver id is: 1820.
+The order is cancelled and its driver id is: 844.
+The order is cancelled and its driver id is: 483.
+The order is cancelled and its driver id is: 1230.
+The order is cancelled and its driver id is: 208.
+The order is cancelled and its driver id is: 469.
+The order is cancelled and its driver id is: 1825.
+The order is cancelled and its driver id is: 744.
+The order is cancelled and its driver id is: 1694.
+The order is cancelled and its driver id is: 1681.
+The order is cancelled and its driver id is: 1706.
+The order is cancelled and its driver id is: 1694.
+The order is cancelled and its driver id is: 1227.
+The order is cancelled and its driver id is: 449.
+The order is cancelled and its driver id is: 420.
+The order is cancelled and its driver id is: 1588.
+The order is cancelled and its driver id is: 228.
+The order is cancelled and its driver id is: 226.
+The order is cancelled and its driver id is: 200.
+The order is cancelled and its driver id is: 1588.
+The order is cancelled and its driver id is: 235.
+The order is cancelled and its driver id is: 393.
+The order is cancelled and its driver id is: 261.
+The order is cancelled and its driver id is: 221.
+The order is cancelled and its driver id is: 261.
+The order is cancelled and its driver id is: 1600.
+The order is cancelled and its driver id is: 1591.
+The order is cancelled and its driver id is: 1112.
+The order is cancelled and its driver id is: 473.
+The order is cancelled and its driver id is: 1591.
+The order is cancelled and its driver id is: 535.
+The order is cancelled and its driver id is: 1442.
+The order is cancelled and its driver id is: 1345.
+The order is cancelled and its driver id is: 1403.
+The order is cancelled and its driver id is: 1423.
+The start node id of the target driver is fd52ba1ac1152aee.
+Pass
+The end node id of the order taken by the target driver is 23fae3f1f69dddfa.
+The order is cancelled and its driver id is: 868.
+The order is cancelled and its driver id is: 920.
+The order is cancelled and its driver id is: 735.
+The order is cancelled and its driver id is: 1303.
+The order is cancelled and its driver id is: 1276.
+The order is cancelled and its driver id is: 282.
+The order is cancelled and its driver id is: 333.
+The order is cancelled and its driver id is: 153.
+The order is cancelled and its driver id is: 1597.
+The order is cancelled and its driver id is: 783.
+The order is cancelled and its driver id is: 967.
+The order is cancelled and its driver id is: 174.
+The order is cancelled and its driver id is: 176.
+The order is cancelled and its driver id is: 291.
+The order is cancelled and its driver id is: 309.
+The order is cancelled and its driver id is: 167.
+The order is cancelled and its driver id is: 590.
+The order is cancelled and its driver id is: 958.
+The order is cancelled and its driver id is: 1171.
+The order is cancelled and its driver id is: 1419.
+The order is cancelled and its driver id is: 1398.
+The order is cancelled and its driver id is: 694.
+The order is cancelled and its driver id is: 811.
+The order is cancelled and its driver id is: 1775.
+The order is cancelled and its driver id is: 1730.
+The order is cancelled and its driver id is: 1691.
+The start node id of the target driver is 23fae3f1f69dddfa.
+Pass
+The end node id of the order taken by the target driver is fa7248c2a1040346.
+The start node id of the target driver is fa7248c2a1040346.
+Pass
+The end node id of the order taken by the target driver is 23fae3f1f69dddfa.
+The start node id of the target driver is 23fae3f1f69dddfa.
+Pass
+The end node id of the order taken by the target driver is fa7248c2a1040346.
+The start node id of the target driver is fa7248c2a1040346.
+Pass
+The end node id of the order taken by the target driver is 7179ea6231b95e1a.
+The start node id of the target driver is 7179ea6231b95e1a.
 Pass
 The end node id of the order taken by the target driver is 97243677f83bd758.
 The start node id of the target driver is 97243677f83bd758.
 Pass
-The end node id of the order taken by the target driver is 4b6f2ddd673db412.
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is a0113f7277dc3ea1.
+The start node id of the target driver is a0113f7277dc3ea1.
+Pass
+The end node id of the order taken by the target driver is c8bcc56cd00c97c1.
+Episode:  4
+Epsilon 0.12820249999997732
+Total number of actions inside episode:  23353
+Episode reward 3703.4837766427513
+Response rate 0.7767341040462428
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is fa7248c2a1040346.
+The order is cancelled and its driver id is: 1074.
+The order is cancelled and its driver id is: 191.
+The start node id of the target driver is fa7248c2a1040346.
+Pass
+The end node id of the order taken by the target driver is 8530fa3530dee5ea.
+The order is cancelled and its driver id is: 481.
+The start node id of the target driver is fa7248c2a1040346.
+Error in driver location.
+The end node id of the order taken by the target driver is c1132ace1a4debc0.
+The order is cancelled and its driver id is: 955.
+The order is cancelled and its driver id is: 647.
+The order is cancelled and its driver id is: 316.
+The order is cancelled and its driver id is: 1794.
+The order is cancelled and its driver id is: 1728.
+The order is cancelled and its driver id is: 1747.
+The order is cancelled and its driver id is: 260.
+The order is cancelled and its driver id is: 1732.
+The order is cancelled and its driver id is: 1757.
+The order is cancelled and its driver id is: 1686.
+The order is cancelled and its driver id is: 1698.
+The order is cancelled and its driver id is: 468.
+The order is cancelled and its driver id is: 423.
+The order is cancelled and its driver id is: 1171.
+The order is cancelled and its driver id is: 1169.
+The order is cancelled and its driver id is: 632.
+The order is cancelled and its driver id is: 667.
+The order is cancelled and its driver id is: 669.
+The order is cancelled and its driver id is: 2001.
+The order is cancelled and its driver id is: 1158.
+The order is cancelled and its driver id is: 670.
+The order is cancelled and its driver id is: 727.
+The order is cancelled and its driver id is: 750.
+The order is cancelled and its driver id is: 922.
+The order is cancelled and its driver id is: 1706.
+The order is cancelled and its driver id is: 1736.
+The order is cancelled and its driver id is: 1917.
+The order is cancelled and its driver id is: 2015.
+The order is cancelled and its driver id is: 1627.
+The order is cancelled and its driver id is: 506.
+The order is cancelled and its driver id is: 1615.
+The order is cancelled and its driver id is: 142.
+The order is cancelled and its driver id is: 1574.
+The order is cancelled and its driver id is: 493.
+The order is cancelled and its driver id is: 1325.
+The order is cancelled and its driver id is: 1655.
+The order is cancelled and its driver id is: 1375.
+The order is cancelled and its driver id is: 27.
+The order is cancelled and its driver id is: 1853.
+The order is cancelled and its driver id is: 20.
+The order is cancelled and its driver id is: 1852.
+The order is cancelled and its driver id is: 15.
+The order is cancelled and its driver id is: 673.
+The order is cancelled and its driver id is: 1077.
+The order is cancelled and its driver id is: 71.
+The order is cancelled and its driver id is: 485.
+The order is cancelled and its driver id is: 1348.
+The order is cancelled and its driver id is: 622.
+The order is cancelled and its driver id is: 1862.
+The order is cancelled and its driver id is: 860.
+Episode:  5
+Epsilon 0.1538429999999655
+Total number of actions inside episode:  22983
+Episode reward 3806.1121456828537
+Response rate 0.8033749082905356
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The order is cancelled and its driver id is: 1669.
+The order is cancelled and its driver id is: 1874.
+The order is cancelled and its driver id is: 1959.
+The order is cancelled and its driver id is: 1884.
+The order is cancelled and its driver id is: 1919.
+The order is cancelled and its driver id is: 961.
+The order is cancelled and its driver id is: 1736.
+The order is cancelled and its driver id is: 1732.
+The order is cancelled and its driver id is: 1299.
+The order is cancelled and its driver id is: 1239.
+The order is cancelled and its driver id is: 731.
+The order is cancelled and its driver id is: 1695.
+The order is cancelled and its driver id is: 1731.
+The order is cancelled and its driver id is: 1759.
+The order is cancelled and its driver id is: 291.
+The order is cancelled and its driver id is: 291.
+The order is cancelled and its driver id is: 356.
+The order is cancelled and its driver id is: 442.
+The order is cancelled and its driver id is: 1598.
+The order is cancelled and its driver id is: 341.
+The order is cancelled and its driver id is: 428.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is 892b68202a3765b1.
+The order is cancelled and its driver id is: 481.
+The start node id of the target driver is da136e81830381eb.
+Error in driver location.
+The end node id of the order taken by the target driver is 7b2f5d75bac4ba28.
+The order is cancelled and its driver id is: 1920.
+The order is cancelled and its driver id is: 1145.
+The order is cancelled and its driver id is: 1116.
+The order is cancelled and its driver id is: 638.
+The order is cancelled and its driver id is: 1507.
+The order is cancelled and its driver id is: 1505.
+The order is cancelled and its driver id is: 1469.
+The order is cancelled and its driver id is: 1171.
+The order is cancelled and its driver id is: 1125.
+The order is cancelled and its driver id is: 1507.
+The order is cancelled and its driver id is: 764.
+The order is cancelled and its driver id is: 705.
+The order is cancelled and its driver id is: 547.
+The order is cancelled and its driver id is: 1292.
+The order is cancelled and its driver id is: 718.
+The order is cancelled and its driver id is: 1964.
+The order is cancelled and its driver id is: 726.
+The order is cancelled and its driver id is: 2030.
+The order is cancelled and its driver id is: 1610.
+The order is cancelled and its driver id is: 1979.
+The order is cancelled and its driver id is: 86.
+The order is cancelled and its driver id is: 1105.
+The order is cancelled and its driver id is: 1105.
+The order is cancelled and its driver id is: 1591.
+The order is cancelled and its driver id is: 613.
+The order is cancelled and its driver id is: 944.
+The order is cancelled and its driver id is: 102.
+The order is cancelled and its driver id is: 1854.
+The order is cancelled and its driver id is: 1174.
+The order is cancelled and its driver id is: 1060.
+The order is cancelled and its driver id is: 1100.
+The order is cancelled and its driver id is: 1158.
+The order is cancelled and its driver id is: 1308.
+The order is cancelled and its driver id is: 443.
+The order is cancelled and its driver id is: 11.
+The start node id of the target driver is 7b2f5d75bac4ba28.
+Pass
+The end node id of the order taken by the target driver is 83fd0dce987f46ea.
+The start node id of the target driver is 83fd0dce987f46ea.
+Pass
+The end node id of the order taken by the target driver is 83fd0dce987f46ea.
+The start node id of the target driver is 83fd0dce987f46ea.
+Pass
+The end node id of the order taken by the target driver is 1299e4a7eff212ae.
+The start node id of the target driver is 1299e4a7eff212ae.
+Pass
+The end node id of the order taken by the target driver is 11506daa7b1c4cc6.
+The start node id of the target driver is 11506daa7b1c4cc6.
+Pass
+The end node id of the order taken by the target driver is 6b91684aa7dc7101.
+The start node id of the target driver is 6b91684aa7dc7101.
+Pass
+The end node id of the order taken by the target driver is 1807da3d0f1f9c97.
+The start node id of the target driver is 1807da3d0f1f9c97.
+Pass
+The end node id of the order taken by the target driver is 7e69074f34788f2c.
+The start node id of the target driver is 7e69074f34788f2c.
+Pass
+The end node id of the order taken by the target driver is b0a4bc0e35c6f566.
+Episode:  6
+Epsilon 0.1794834999999537
+Total number of actions inside episode:  23971
+Episode reward 3644.4073744266257
+Response rate 0.8107494322482968
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 73f9ea19c4c5f934.
+The order is cancelled and its driver id is: 1802.
+The order is cancelled and its driver id is: 1054.
+The order is cancelled and its driver id is: 1806.
+The order is cancelled and its driver id is: 1884.
+The order is cancelled and its driver id is: 1097.
+The order is cancelled and its driver id is: 1871.
+The order is cancelled and its driver id is: 999.
+The order is cancelled and its driver id is: 963.
+The order is cancelled and its driver id is: 521.
+The order is cancelled and its driver id is: 521.
+The order is cancelled and its driver id is: 1717.
+The order is cancelled and its driver id is: 1327.
+The order is cancelled and its driver id is: 262.
+The order is cancelled and its driver id is: 1282.
+The order is cancelled and its driver id is: 231.
+The order is cancelled and its driver id is: 751.
+The order is cancelled and its driver id is: 693.
+The order is cancelled and its driver id is: 671.
+The order is cancelled and its driver id is: 312.
+The order is cancelled and its driver id is: 291.
+The order is cancelled and its driver id is: 1320.
+The order is cancelled and its driver id is: 1227.
+The order is cancelled and its driver id is: 212.
+The order is cancelled and its driver id is: 263.
+The order is cancelled and its driver id is: 1173.
+The order is cancelled and its driver id is: 1562.
+The order is cancelled and its driver id is: 529.
+The order is cancelled and its driver id is: 534.
+The order is cancelled and its driver id is: 1143.
+The order is cancelled and its driver id is: 1162.
+The order is cancelled and its driver id is: 1914.
+The order is cancelled and its driver id is: 1225.
+The order is cancelled and its driver id is: 1382.
+The order is cancelled and its driver id is: 1497.
+The order is cancelled and its driver id is: 928.
+The order is cancelled and its driver id is: 911.
+The order is cancelled and its driver id is: 540.
+The order is cancelled and its driver id is: 540.
+The order is cancelled and its driver id is: 1226.
+The order is cancelled and its driver id is: 1232.
+The order is cancelled and its driver id is: 1306.
+The order is cancelled and its driver id is: 2038.
+The order is cancelled and its driver id is: 711.
+The order is cancelled and its driver id is: 1288.
+The order is cancelled and its driver id is: 1735.
+The order is cancelled and its driver id is: 1936.
+The order is cancelled and its driver id is: 933.
+The order is cancelled and its driver id is: 1194.
+The order is cancelled and its driver id is: 504.
+The order is cancelled and its driver id is: 1303.
+The order is cancelled and its driver id is: 140.
+The order is cancelled and its driver id is: 889.
+The order is cancelled and its driver id is: 301.
+The order is cancelled and its driver id is: 1165.
+The order is cancelled and its driver id is: 767.
+The order is cancelled and its driver id is: 767.
+The order is cancelled and its driver id is: 616.
+The order is cancelled and its driver id is: 292.
+The order is cancelled and its driver id is: 1516.
+The start node id of the target driver is 73f9ea19c4c5f934.
+Pass
+The end node id of the order taken by the target driver is 83fd0dce987f46ea.
+The order is cancelled and its driver id is: 174.
+The order is cancelled and its driver id is: 631.
+The order is cancelled and its driver id is: 1649.
+The order is cancelled and its driver id is: 344.
+The order is cancelled and its driver id is: 1850.
+The order is cancelled and its driver id is: 633.
+The order is cancelled and its driver id is: 1325.
+The order is cancelled and its driver id is: 1683.
+The order is cancelled and its driver id is: 1177.
+The order is cancelled and its driver id is: 802.
+The start node id of the target driver is 83fd0dce987f46ea.
+Pass
+The end node id of the order taken by the target driver is 7b2f5d75bac4ba28.
+The start node id of the target driver is 7b2f5d75bac4ba28.
+Pass
+The end node id of the order taken by the target driver is 83fd0dce987f46ea.
+The start node id of the target driver is 83fd0dce987f46ea.
+Pass
+The end node id of the order taken by the target driver is 11506daa7b1c4cc6.
+The start node id of the target driver is 11506daa7b1c4cc6.
+Pass
+The end node id of the order taken by the target driver is 1299e4a7eff212ae.
+The start node id of the target driver is 1299e4a7eff212ae.
+Pass
+The end node id of the order taken by the target driver is 6a2e19aab9740e29.
+The start node id of the target driver is 6a2e19aab9740e29.
+Pass
+The end node id of the order taken by the target driver is 6b91684aa7dc7101.
+Episode:  7
+Epsilon 0.20512399999994188
+Total number of actions inside episode:  23175
+Episode reward 3887.680075660294
+Response rate 0.8168210976478973
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 310c5bac13100430.
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 5bc416b12315fec4.
+The order is cancelled and its driver id is: 845.
+The order is cancelled and its driver id is: 1663.
+The order is cancelled and its driver id is: 1241.
+The order is cancelled and its driver id is: 580.
+The order is cancelled and its driver id is: 637.
+The order is cancelled and its driver id is: 1822.
+The order is cancelled and its driver id is: 2048.
+The start node id of the target driver is 5bc416b12315fec4.
+Pass
+The end node id of the order taken by the target driver is 310c5bac13100430.
+The order is cancelled and its driver id is: 994.
+The order is cancelled and its driver id is: 972.
+The order is cancelled and its driver id is: 501.
+The order is cancelled and its driver id is: 2005.
+The order is cancelled and its driver id is: 517.
+The order is cancelled and its driver id is: 517.
+The order is cancelled and its driver id is: 1772.
+The order is cancelled and its driver id is: 760.
+The order is cancelled and its driver id is: 288.
+The order is cancelled and its driver id is: 1909.
+The order is cancelled and its driver id is: 370.
+The order is cancelled and its driver id is: 207.
+The order is cancelled and its driver id is: 405.
+The order is cancelled and its driver id is: 442.
+The order is cancelled and its driver id is: 769.
+The order is cancelled and its driver id is: 1606.
+The order is cancelled and its driver id is: 1615.
+The order is cancelled and its driver id is: 1120.
+The order is cancelled and its driver id is: 1965.
+The order is cancelled and its driver id is: 966.
+The order is cancelled and its driver id is: 867.
+The order is cancelled and its driver id is: 1404.
+The order is cancelled and its driver id is: 1518.
+The order is cancelled and its driver id is: 1524.
+The order is cancelled and its driver id is: 1530.
+The order is cancelled and its driver id is: 1146.
+The order is cancelled and its driver id is: 1176.
+The order is cancelled and its driver id is: 1518.
+The order is cancelled and its driver id is: 1324.
+The order is cancelled and its driver id is: 916.
+The order is cancelled and its driver id is: 276.
+The order is cancelled and its driver id is: 2021.
+The order is cancelled and its driver id is: 428.
+The order is cancelled and its driver id is: 466.
+The order is cancelled and its driver id is: 1319.
+The order is cancelled and its driver id is: 1012.
+The order is cancelled and its driver id is: 587.
+The order is cancelled and its driver id is: 117.
+The order is cancelled and its driver id is: 284.
+The order is cancelled and its driver id is: 1847.
+The order is cancelled and its driver id is: 1847.
+The order is cancelled and its driver id is: 1916.
+The order is cancelled and its driver id is: 1447.
+The order is cancelled and its driver id is: 483.
+The order is cancelled and its driver id is: 1164.
+The order is cancelled and its driver id is: 1499.
+The order is cancelled and its driver id is: 401.
+The order is cancelled and its driver id is: 430.
+The order is cancelled and its driver id is: 1853.
+The order is cancelled and its driver id is: 1397.
+The order is cancelled and its driver id is: 628.
+The order is cancelled and its driver id is: 1679.
+The order is cancelled and its driver id is: 1983.
+The order is cancelled and its driver id is: 825.
+The order is cancelled and its driver id is: 1937.
+The order is cancelled and its driver id is: 112.
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 5bc416b12315fec4.
+The order is cancelled and its driver id is: 1624.
+The order is cancelled and its driver id is: 242.
+The order is cancelled and its driver id is: 210.
+The order is cancelled and its driver id is: 1226.
+The start node id of the target driver is 5bc416b12315fec4.
+Pass
+The end node id of the order taken by the target driver is 73f9ea19c4c5f934.
+The start node id of the target driver is 73f9ea19c4c5f934.
+Pass
+The end node id of the order taken by the target driver is 5bc416b12315fec4.
+The start node id of the target driver is 5bc416b12315fec4.
+Pass
+The end node id of the order taken by the target driver is 310c5bac13100430.
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+The start node id of the target driver is fd52ba1ac1152aee.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is 97243677f83bd758.
+The start node id of the target driver is 97243677f83bd758.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is 9d2739e10948e232.
+The start node id of the target driver is 9d2739e10948e232.
+Pass
+The end node id of the order taken by the target driver is 94be0752a9fa25ed.
+The start node id of the target driver is 94be0752a9fa25ed.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+Episode:  8
+Epsilon 0.23076449999993007
+Total number of actions inside episode:  22917
+Episode reward 3747.676509768219
+Response rate 0.8102564102564103
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is fa7248c2a1040346.
+The order is cancelled and its driver id is: 1990.
+The start node id of the target driver is fa7248c2a1040346.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+The order is cancelled and its driver id is: 2048.
+The order is cancelled and its driver id is: 2049.
+The order is cancelled and its driver id is: 1664.
+The order is cancelled and its driver id is: 6.
+The order is cancelled and its driver id is: 1082.
+The order is cancelled and its driver id is: 319.
+The order is cancelled and its driver id is: 517.
+The order is cancelled and its driver id is: 233.
+The order is cancelled and its driver id is: 214.
+The order is cancelled and its driver id is: 1263.
+The order is cancelled and its driver id is: 243.
+The order is cancelled and its driver id is: 206.
+The order is cancelled and its driver id is: 724.
+The order is cancelled and its driver id is: 737.
+The order is cancelled and its driver id is: 1687.
+The order is cancelled and its driver id is: 1741.
+The order is cancelled and its driver id is: 1786.
+The order is cancelled and its driver id is: 439.
+The order is cancelled and its driver id is: 365.
+The order is cancelled and its driver id is: 889.
+The order is cancelled and its driver id is: 1376.
+The order is cancelled and its driver id is: 1363.
+The order is cancelled and its driver id is: 1374.
+The order is cancelled and its driver id is: 1474.
+The order is cancelled and its driver id is: 1118.
+The order is cancelled and its driver id is: 693.
+The order is cancelled and its driver id is: 712.
+The order is cancelled and its driver id is: 556.
+The order is cancelled and its driver id is: 543.
+The order is cancelled and its driver id is: 672.
+The order is cancelled and its driver id is: 1977.
+The order is cancelled and its driver id is: 2037.
+The order is cancelled and its driver id is: 2012.
+The order is cancelled and its driver id is: 323.
+The order is cancelled and its driver id is: 347.
+The order is cancelled and its driver id is: 1220.
+The order is cancelled and its driver id is: 967.
+The order is cancelled and its driver id is: 143.
+The order is cancelled and its driver id is: 653.
+The order is cancelled and its driver id is: 1521.
+The order is cancelled and its driver id is: 35.
+The order is cancelled and its driver id is: 1851.
+The order is cancelled and its driver id is: 547.
+The order is cancelled and its driver id is: 129.
+The order is cancelled and its driver id is: 503.
+The order is cancelled and its driver id is: 1218.
+The order is cancelled and its driver id is: 1759.
+The order is cancelled and its driver id is: 1696.
+The order is cancelled and its driver id is: 1675.
+The order is cancelled and its driver id is: 1636.
+The order is cancelled and its driver id is: 193.
+The order is cancelled and its driver id is: 600.
+The start node id of the target driver is fd52ba1ac1152aee.
+Pass
+The end node id of the order taken by the target driver is 4e6ab406af4a842b.
+The start node id of the target driver is 4e6ab406af4a842b.
+Pass
+The end node id of the order taken by the target driver is 617fc087efff5182.
+The start node id of the target driver is 617fc087efff5182.
+Pass
+The end node id of the order taken by the target driver is 617fc087efff5182.
+The start node id of the target driver is 617fc087efff5182.
+Pass
+The end node id of the order taken by the target driver is 4e6ab406af4a842b.
+The start node id of the target driver is 4e6ab406af4a842b.
+Pass
+The end node id of the order taken by the target driver is 73f9ea19c4c5f934.
+The start node id of the target driver is 73f9ea19c4c5f934.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+The start node id of the target driver is fd52ba1ac1152aee.
+Pass
+The end node id of the order taken by the target driver is fd52ba1ac1152aee.
+The start node id of the target driver is fd52ba1ac1152aee.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is 9d2739e10948e232.
+The start node id of the target driver is 9d2739e10948e232.
+Pass
+The end node id of the order taken by the target driver is 53d332a2192d0870.
+The start node id of the target driver is 53d332a2192d0870.
+Pass
+The end node id of the order taken by the target driver is da136e81830381eb.
+The start node id of the target driver is da136e81830381eb.
+Pass
+The end node id of the order taken by the target driver is a0113f7277dc3ea1.
+The start node id of the target driver is a0113f7277dc3ea1.
+Pass
+The end node id of the order taken by the target driver is c8bcc56cd00c97c1.
+Episode:  9
+Epsilon 0.2564049999999183
+Total number of actions inside episode:  22993
+Episode reward 3970.947543726766
+Response rate 0.8127690100430416
+The start node id of the target driver is 310c5bac13100430.
+Pass
+The end node id of the order taken by the target driver is 5bc416b12315fec4.
+The order is cancelled and its driver id is: 1804.
+The order is cancelled and its driver id is: 1972.
+The order is cancelled and its driver id is: 817.
+The start node id of the target driver is 5bc416b12315fec4.
+Pass
+The end node id of the order taken by the target driver is 090d68df506b9670.
+The order is cancelled and its driver id is: 1069.
+The order is cancelled and its driver id is: 1088.
+The order is cancelled and its driver id is: 1057.
+The order is cancelled and its driver id is: 1035.
+The order is cancelled and its driver id is: 1223.
+The order is cancelled and its driver id is: 1223.
+The order is cancelled and its driver id is: 961.
+The order is cancelled and its driver id is: 502.
+The order is cancelled and its driver id is: 515.
+The order is cancelled and its driver id is: 1286.
+The order is cancelled and its driver id is: 242.
+The order is cancelled and its driver id is: 218.
+The order is cancelled and its driver id is: 222.
+The order is cancelled and its driver id is: 733.
+The order is cancelled and its driver id is: 1783.
+The order is cancelled and its driver id is: 260.
+The order is cancelled and its driver id is: 287.
+The order is cancelled and its driver id is: 1335.
+The order is cancelled and its driver id is: 631.
+The order is cancelled and its driver id is: 366.
+The order is cancelled and its driver id is: 1563.
+The order is cancelled and its driver id is: 1580.
+The order is cancelled and its driver id is: 1664.
+The order is cancelled and its driver id is: 1613.
+The order is cancelled and its driver id is: 1558.
+The order is cancelled and its driver id is: 250.
+The order is cancelled and its driver id is: 1373.
+The order is cancelled and its driver id is: 1111.
+The order is cancelled and its driver id is: 1117.
+The order is cancelled and its driver id is: 1322.
+The order is cancelled and its driver id is: 890.
+The order is cancelled and its driver id is: 900.
+The order is cancelled and its driver id is: 1597.
+The order is cancelled and its driver id is: 1988.
+The order is cancelled and its driver id is: 347.
+The order is cancelled and its driver id is: 362.
+The order is cancelled and its driver id is: 389.
+The order is cancelled and its driver id is: 605.
+The order is cancelled and its driver id is: 740.
+The order is cancelled and its driver id is: 267.
+The order is cancelled and its driver id is: 65.
+The order is cancelled and its driver id is: 1455.
+The order is cancelled and its driver id is: 998.
+The order is cancelled and its driver id is: 788.
+The order is cancelled and its driver id is: 19.
+The order is cancelled and its driver id is: 486.
+The order is cancelled and its driver id is: 190.
+The order is cancelled and its driver id is: 333.
+The order is cancelled and its driver id is: 263.
+The order is cancelled and its driver id is: 1654.
+The order is cancelled and its driver id is: 1200.
+The order is cancelled and its driver id is: 1143.
+The order is cancelled and its driver id is: 1017.
+The start node id of the target driver is 090d68df506b9670.
+Pass
+The end node id of the order taken by the target driver is b5e5d49f4fbbc4bb.
+The start node id of the target driver is b5e5d49f4fbbc4bb.
+Pass
+The end node id of the order taken by the target driver is b45278d8e3dd712b.
+The start node id of the target driver is b45278d8e3dd712b.
+Pass
+The end node id of the order taken by the target driver is 613f8d7f81beeff3.
+
