@@ -458,7 +458,7 @@ class CityReal:
         for t in self.init_idle_driver:
             if time_start <= t <= self.city_time:
                 for grid_id, value in self.init_idle_driver[t].items():
-                    for i in range(value//10):  # here
+                    for i in range(value//10):  # ignore // 10 here
                         added_driver_id = n_total_drivers + new_driver_count
                         online_duration = np.random.choice(range(1, len(self.working_time_dist)+1), p=self.working_time_dist) * 1000
                         if t + online_duration > self.city_time:
@@ -472,7 +472,7 @@ class CityReal:
         n_total_drivers = len(self.drivers.keys())
         new_driver_count = 0
         for grid_id, value in self.init_idle_driver[self.city_time].items():
-            for i in range(value // 100):
+            for i in range(value // 10):  # ignore // 10 here
                 added_driver_id = n_total_drivers + new_driver_count
                 new_driver_count += 1
                 online_duration = np.random.choice(range(1, len(self.working_time_dist) + 1), p=self.working_time_dist) * 1000
