@@ -5,7 +5,7 @@ import random
 import time
 import os
 from datetime import datetime
-from dqn.city import create_city
+from dqn.city_sample import create_city   # here
 from simulator.objects import Order
 
 
@@ -22,11 +22,11 @@ EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.9                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
 MEMORY_CAPACITY = 100000
-NUM_GRIDS = 1322
+NUM_GRIDS = 100  # 1322
 NUM_TIME_INTERVAL = 48
 DIM_STATE = NUM_GRIDS + NUM_TIME_INTERVAL
 DIM_ACTION = 2 * NUM_GRIDS
-TARGET_DRIVER_ID = 481
+TARGET_DRIVER_ID = 299
 directory = os.path.dirname(__file__)
 
 
@@ -44,7 +44,7 @@ def get_time_one_hot(t):
 
 
 env = create_city()
-grid_map = {id: get_grid_one_hot(i) for i, id in enumerate(env.grid_ids)}
+grid_map = {id: get_grid_one_hot(i, NUM_GRIDS) for i, id in enumerate(env.grid_ids)}
 
 
 class Net(nn.Module):
@@ -144,7 +144,7 @@ class DQN(object):
 
 if __name__ == '__main__':
     dqn = DQN(DIM_STATE, DIM_ACTION)
-    end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))
+    end_time = int(time.mktime(datetime.strptime("2016/11/01 13:59:58", "%Y/%m/%d %H:%M:%S").timetuple()))
     # can change the end time here
 
     print("Start training")
@@ -165,7 +165,7 @@ if __name__ == '__main__':
         last_end_node_id = ''
         while env.city_time < end_time:
             # For check use.
-            ##############################################################################################################
+            ###########################################################################################################
             # print("Episode is: " + str(episode))
             # print("city time is: " + str(env.city_time))
             # print("Begin to check all drivers in grids.")
@@ -173,7 +173,7 @@ if __name__ == '__main__':
             # print("Begin to check all idle drivers in grids.")
             # env.check_idle_drivers_in_grids()
             # print("end one cycle")
-            ##############################################################################################################
+            ###########################################################################################################
 
             count += 1
             if epsilon < EPSILON_END:
@@ -184,7 +184,7 @@ if __name__ == '__main__':
             drivers_to_store = []
             for driver, [(loc, time), orders, drivers] in states.items():
                 # For check use.
-                ##############################################################################################################
+                #######################################################################################################
                 if driver == TARGET_DRIVER_ID:
                     target_driver_start = loc.get_node_index()
                     print("The start node id of the target driver is %s." % target_driver_start)
@@ -193,7 +193,7 @@ if __name__ == '__main__':
                     else:
                         print("Error in driver location.")
 
-                ##############################################################################################################
+                #######################################################################################################
                 count += 1
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
@@ -213,13 +213,13 @@ if __name__ == '__main__':
                     dispatched_orders.add(orders[aid].order_id)
 
                     # For check use.
-                    ##############################################################################################################
+                    ###################################################################################################
                     if driver == TARGET_DRIVER_ID:
                         # Get unique node id
                         target_driver_order_end = orders[aid].get_end_position_id()
                         last_end_node_id = target_driver_order_end
                         print("The end node id of the order taken by the target driver is %s." % target_driver_order_end)
-                    ##############################################################################################################
+                    ###################################################################################################
 
                     dispatch_actions.append([loc.get_node_index(), driver, orders[aid].get_begin_position_id(),
                                              orders[aid].order_id, orders[aid]])

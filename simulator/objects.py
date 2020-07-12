@@ -126,6 +126,7 @@ class Node(object):
                 assert driver.online is True
                 assert driver.onservice is False
                 self.drivers.pop(driver_id)
+                self.idle_driver_num -= 1
                 self.offline_driver_num += 1
 
     def remove_driver(self, driver_id):
@@ -149,12 +150,14 @@ class Node(object):
             order = self.orders[order_id]
             if order.get_wait_time()+order.get_begin_time() < city_time:
                 self.orders.pop(order_id)
+                self.order_num -= 1
                 count += 1
         return count
 
     def remove_dispatched_order(self, order_id):
         """ Remove the orders that are dispatched to drivers """
         self.orders.pop(order_id)
+        self.order_num -= 1
 
 
 class Driver(object):
