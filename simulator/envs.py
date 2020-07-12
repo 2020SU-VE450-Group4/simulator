@@ -407,9 +407,9 @@ class CityReal:
                 order.set_begin_position(driver_grid)
                 order.set_end_position(driver_grid)
                 order.set_price(0)
-                print("The order is cancelled and its driver id is: %d." % driver_id)
-            if order_id is not None:
-                print("Driver %d take order %d", driver_id, order_id)
+                # print("The order is cancelled and its driver id is: %d." % driver_id)
+            # if order_id is not None:
+            #     print("Driver %d take order %d" % (driver_id, order_id))
             driver.take_order(order)  # take order normally
             dispatched_drivers.append(driver)
             order.set_assigned_time(self.city_time)

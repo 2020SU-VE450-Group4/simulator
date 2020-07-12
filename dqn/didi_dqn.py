@@ -13,7 +13,7 @@ from simulator.objects import Order
 # print(os.getcwd())
 
 # Hyper Parameters
-TOTAL_STEPS = 100000
+TOTAL_STEPS = 200000
 BATCH_SIZE = 1024
 LR = 0.0001                   # learning rate
 EPSILON_END = 0.95             # greedy policy
