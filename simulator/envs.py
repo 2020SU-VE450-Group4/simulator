@@ -399,7 +399,9 @@ class CityReal:
                     pickup_duration = self.transition_trip_time_dict[driver_grid_id][order_grid_id][0]
                 order.set_duration(original_duration + pickup_duration)
             # deal with order cancellation
-            if order_id is not None and np.random.uniform() < 0.05783:  # the passenger cancel the order
+            uni = np.random.uniform()
+            # print(uni)
+            if driver_grid_id != order_grid_id and order_id is not None and uni < 0.05783:  # the passenger cancel the order
                 order.set_duration(0)
                 order.set_begin_position(driver_grid)
                 order.set_end_position(driver_grid)
