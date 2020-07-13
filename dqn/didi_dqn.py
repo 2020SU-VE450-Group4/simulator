@@ -13,7 +13,7 @@ from simulator.objects import Order
 # print(os.getcwd())
 
 # Hyper Parameters
-TOTAL_STEPS = 200000
+TOTAL_STEPS = 400000
 BATCH_SIZE = 1024
 LR = 0.0001                   # learning rate
 EPSILON_END = 0.95             # greedy policy
@@ -21,7 +21,7 @@ EPSILON_START = 0
 EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.9                 # reward discount
 TARGET_REPLACE_ITER = 3000  # target update frequency
-MEMORY_CAPACITY = 100000
+MEMORY_CAPACITY = 80000
 NUM_GRIDS = 100  # 1322
 NUM_TIME_INTERVAL = 48
 DIM_STATE = NUM_GRIDS + NUM_TIME_INTERVAL
@@ -124,7 +124,11 @@ class DQN(object):
         self.learn_step_counter += 1
 
         # sample batch transitions
-        sample_index = np.random.choice(MEMORY_CAPACITY, BATCH_SIZE)
+        if self.memory_counter > MEMORY_CAPACITY:
+            sample_index = np.random.choice(MEMORY_CAPACITY, size=BATCH_SIZE)
+        else:
+            sample_index = np.random.choice(self.memory_counter, size=BATCH_SIZE)
+        # sample_index = np.random.choice(MEMORY_CAPACITY, BATCH_SIZE)
         b_memory = self.memory[sample_index, :]
         state_action = torch.tensor(b_memory[:, :DIM_STATE+DIM_ACTION], dtype=torch.float)
         reward = torch.tensor(b_memory[:, DIM_STATE+DIM_ACTION:DIM_STATE+DIM_ACTION+1], dtype=torch.float)
@@ -151,7 +155,7 @@ if __name__ == '__main__':
 
     epsilon = EPSILON_START
     minutes = 30
-    for episode in range(50):
+    for episode in range(80):
         # dicts of current active {drivers: [(loc, time), orders, neighbours]}
         states = env.reset_clean(city_time="2016/11/01 10:00:00")
         start_time = env.city_time
@@ -175,7 +179,7 @@ if __name__ == '__main__':
             # print("end one cycle")
             ###########################################################################################################
 
-            count += 1
+            # count += 1
             if epsilon < EPSILON_END:
                 epsilon += EPSILON_STEP
 
@@ -185,16 +189,15 @@ if __name__ == '__main__':
             for driver, [(loc, time), orders, drivers] in states.items():
                 # For check use.
                 #######################################################################################################
-                if driver == TARGET_DRIVER_ID:
-                    target_driver_start = loc.get_node_index()
-                    print("The start node id of the target driver is %s." % target_driver_start)
-                    if not last_end_node_id or last_end_node_id == target_driver_start:
-                        print("Pass")
-                    else:
-                        print("Error in driver location.")
+                # if driver == TARGET_DRIVER_ID:
+                #     target_driver_start = loc.get_node_index()
+                #     print("The start node id of the target driver is %s." % target_driver_start)
+                #     if not last_end_node_id or last_end_node_id == target_driver_start:
+                #         print("Pass")
+                #     else:
+                #         print("Error in driver location.")
 
                 #######################################################################################################
-                count += 1
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
                 orders.append(idle_order)
@@ -214,11 +217,11 @@ if __name__ == '__main__':
 
                     # For check use.
                     ###################################################################################################
-                    if driver == TARGET_DRIVER_ID:
-                        # Get unique node id
-                        target_driver_order_end = orders[aid].get_end_position_id()
-                        last_end_node_id = target_driver_order_end
-                        print("The end node id of the order taken by the target driver is %s." % target_driver_order_end)
+                    # if driver == TARGET_DRIVER_ID:
+                    #     # Get unique node id
+                    #     target_driver_order_end = orders[aid].get_end_position_id()
+                    #     last_end_node_id = target_driver_order_end
+                    #     print("The end node id of the order taken by the target driver is %s." % target_driver_order_end)
                     ###################################################################################################
 
                     dispatch_actions.append([loc.get_node_index(), driver, orders[aid].get_begin_position_id(),
@@ -229,6 +232,7 @@ if __name__ == '__main__':
                         # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc.get_node_index()], time])
                         ps, pa, pr = busy_drivers[driver]
                         dqn.store_transition(ps, pa, pr, _s, _a, False)
+                        count += 1
                     busy_drivers[driver] = [grid_map[loc.get_node_index()] + get_time_one_hot(time), a]
             states, r_, info = env.step(dispatch_actions)
             for driver in r_.keys():
@@ -236,7 +240,7 @@ if __name__ == '__main__':
                 busy_drivers[driver].append(r_[driver])
                 episode_reward += r_[driver]
 
-            if dqn.memory_counter > MEMORY_CAPACITY:
+            if dqn.memory_counter > BATCH_SIZE:
                 dqn.learn()
         print("Episode: ", episode)
         print("Epsilon", epsilon)
