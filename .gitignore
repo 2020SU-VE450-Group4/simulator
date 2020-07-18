@@ -7,3 +7,5 @@ test.ipynb
 .idea
 
 model/a2c
+
+__pycache__/*
