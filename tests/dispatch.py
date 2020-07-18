@@ -29,7 +29,7 @@ def get_dispatch_observ(s, num_sample):
     return dispatch_observ, driver_dict, order_dict
 
 
-def dispatch(s, num_sample=1):
+def dispatch(s, num_sample=0.3):
     """
     State input given by get_observation_verbose
     """
@@ -148,9 +148,9 @@ def main():
         real_order_list = pickle.load(pk)
 
     parser = argparse.ArgumentParser(description='Planning and Learning dispatch')
-    parser.add_argument('--value', type=str, default="V.pkl",
+    parser.add_argument('--value', type=str, default="V0104mean.pkl",
                         help='state value *.pkl') 
-    parser.add_argument('--sample', type=int, default=1, 
+    parser.add_argument('--sample', type=int, default=0.3,
                         help='number of sample drivers for km') 
     args = parser.parse_args()
     with open(args.value, "rb") as pk:
