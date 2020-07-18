@@ -105,7 +105,7 @@ class DQN(object):
         # q_eval w.r.t the action in experience
         q_eval = self.eval_net(state_action)  # .gather(1, action)  # shape (batch, 1)
         q_next = self.target_net(detach_state).detach()     # detach from graph, don't backpropagate
-        q_target = reward + GAMMA * (1 - done) * q_next.max(1)[0].view(BATCH_SIZE, 1)   # shape (batch, 1)
+        q_target = reward + GAMMA * q_next.max(1)[0].view(BATCH_SIZE, 1)   # shape (batch, 1)
         loss = self.loss_func(q_eval, q_target)
 
         self.optimizer.zero_grad()

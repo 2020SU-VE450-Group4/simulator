@@ -1,0 +1,415 @@
+1/10 driver (has bug...), 1/10 orders, all real data in 20161101, (use real order) no variation between different episodes
+TOTAL_STEPS = 400000
+BATCH_SIZE = 1024
+LR = 0.0001                   # learning rate
+EPSILON_END = 0.95             # greedy policy
+EPSILON_START = 0
+EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
+GAMMA = 0.9                 # reward discount
+TARGET_REPLACE_ITER = 3000  # target update frequency
+MEMORY_CAPACITY = 80000
+
+10:00:00 -- 13:59:58
+
+/usr/local/bin/python3.7 /Users/yifeizhang/Documents/VE450/simulator/dqn/didi_dqn.py
+Start training
+Episode:  0
+Epsilon 0.017097625000001216
+Total number of actions inside episode:  10036
+Episode reward 6207.610000000012
+Response rate 0.8135593220338984
+Episode:  1
+Epsilon 0.03419524999999334
+Total number of actions inside episode:  9972
+Episode reward 6190.579999999998
+Response rate 0.8097996918335901
+Episode:  2
+Epsilon 0.051292874999985465
+Total number of actions inside episode:  9933
+Episode reward 6204.4600000000055
+Response rate 0.8129429892141756
+Episode:  3
+Epsilon 0.0683904999999776
+Total number of actions inside episode:  9715
+Episode reward 5501.960000000007
+Response rate 0.800924499229584
+Episode:  4
+Epsilon 0.08548812499996972
+Total number of actions inside episode:  10035
+Episode reward 6208.009999999995
+Response rate 0.8112172573189522
+Episode:  5
+Epsilon 0.10258574999996184
+Total number of actions inside episode:  10059
+Episode reward 6222.990000000007
+Response rate 0.8106625577812019
+Episode:  6
+Epsilon 0.11968337499995396
+Total number of actions inside episode:  9751
+Episode reward 5865.740000000009
+Response rate 0.8074576271186441
+Episode:  7
+Epsilon 0.13678099999994608
+Total number of actions inside episode:  9699
+Episode reward 5709.429999999999
+Response rate 0.803020030816641
+Episode:  8
+Epsilon 0.1538786249999382
+Total number of actions inside episode:  9697
+Episode reward 5664.480000000002
+Response rate 0.7996302003081665
+Episode:  9
+Epsilon 0.17097624999993033
+Total number of actions inside episode:  9867
+Episode reward 6068.9300000000185
+Response rate 0.8094915254237288
+Episode:  10
+Epsilon 0.18807387499992245
+Total number of actions inside episode:  9886
+Episode reward 6020.710000000007
+Response rate 0.8086286594761171
+Episode:  11
+Epsilon 0.20517149999991457
+Total number of actions inside episode:  9859
+Episode reward 5996.540000000005
+Response rate 0.8082588597842835
+Episode:  12
+Epsilon 0.2222691249999067
+Total number of actions inside episode:  9723
+Episode reward 5562.910000000007
+Response rate 0.799075500770416
+Episode:  13
+Epsilon 0.23936674999989882
+Total number of actions inside episode:  9833
+Episode reward 5937.390000000006
+Response rate 0.8074576271186441
+Episode:  14
+Epsilon 0.25646437499989094
+Total number of actions inside episode:  9906
+Episode reward 6009.509999999998
+Response rate 0.8085670261941449
+Episode:  15
+Epsilon 0.27356199999988307
+Total number of actions inside episode:  9880
+Episode reward 5839.56
+Response rate 0.805362095531587
+Episode:  16
+Epsilon 0.2906596249998752
+Total number of actions inside episode:  9940
+Episode reward 6100.670000000009
+Response rate 0.808382126348228
+Episode:  17
+Epsilon 0.3077572499998673
+Total number of actions inside episode:  9862
+Episode reward 5810.840000000008
+Response rate 0.8048073959938367
+Episode:  18
+Epsilon 0.32485487499985943
+Total number of actions inside episode:  9939
+Episode reward 5952.889999999999
+Response rate 0.8063482280431433
+Episode:  19
+Epsilon 0.34195249999985156
+Total number of actions inside episode:  9955
+Episode reward 5693.040000000008
+Response rate 0.8028351309707242
+Episode:  20
+Epsilon 0.3590501249998437
+Total number of actions inside episode:  10288
+Episode reward 6443.580000000006
+Response rate 0.8147303543913713
+Episode:  21
+Epsilon 0.3761477499998358
+Total number of actions inside episode:  9846
+Episode reward 5971.940000000005
+Response rate 0.8047457627118644
+Episode:  22
+Epsilon 0.3932453749998279
+Total number of actions inside episode:  9815
+Episode reward 5761.920000000005
+Response rate 0.7996918335901386
+Episode:  23
+Epsilon 0.41034299999982005
+Total number of actions inside episode:  9998
+Episode reward 6244.330000000003
+Response rate 0.80788906009245
+Episode:  24
+Epsilon 0.42744062499981217
+Total number of actions inside episode:  9797
+Episode reward 5763.150000000007
+Response rate 0.8021571648690293
+Episode:  25
+Epsilon 0.4445382499998043
+Total number of actions inside episode:  10073
+Episode reward 5974.710000000006
+Response rate 0.8073343605546995
+Episode:  26
+Epsilon 0.4616358749997964
+Total number of actions inside episode:  9942
+Episode reward 5694.75000000001
+Response rate 0.7992604006163329
+Episode:  27
+Epsilon 0.47873349999978854
+Total number of actions inside episode:  10181
+Episode reward 5974.130000000018
+Response rate 0.8074576271186441
+Episode:  28
+Epsilon 0.49583112499978066
+Total number of actions inside episode:  10038
+Episode reward 5679.200000000008
+Response rate 0.8004314329738058
+Episode:  29
+Epsilon 0.5129287499997728
+Total number of actions inside episode:  10098
+Episode reward 5525.500000000008
+Response rate 0.7998767334360555
+Episode:  30
+Epsilon 0.5300263749997649
+Total number of actions inside episode:  10028
+Episode reward 5828.670000000001
+Response rate 0.8040677966101695
+Episode:  31
+Epsilon 0.547123999999757
+Total number of actions inside episode:  9756
+Episode reward 5504.3899999999985
+Response rate 0.7950077041602466
+Episode:  32
+Epsilon 0.5642216249997491
+Total number of actions inside episode:  10048
+Episode reward 5453.140000000006
+Response rate 0.7989522342064714
+Episode:  33
+Epsilon 0.5813192499997413
+Total number of actions inside episode:  9945
+Episode reward 5545.059999999999
+Response rate 0.7983975346687211
+Episode:  34
+Epsilon 0.5984168749997334
+Total number of actions inside episode:  10053
+Episode reward 5420.020000000002
+Response rate 0.7977195685670262
+Episode:  35
+Epsilon 0.6155144999997255
+Total number of actions inside episode:  10190
+Episode reward 5601.510000000007
+Response rate 0.8001232665639445
+Episode:  36
+Epsilon 0.6326121249997176
+Total number of actions inside episode:  9724
+Episode reward 7013.990000000013
+Response rate 0.7983359013867488
+Episode:  37
+Epsilon 0.6497097499997098
+Total number of actions inside episode:  9330
+Episode reward 7786.959999999996
+Response rate 0.8003697996918335
+Episode:  38
+Epsilon 0.6668073749997019
+Total number of actions inside episode:  9471
+Episode reward 8095.140000000001
+Response rate 0.807211093990755
+Episode:  39
+Epsilon 0.683904999999694
+Total number of actions inside episode:  9473
+Episode reward 7778.6799999999985
+Response rate 0.8024036979969184
+Episode:  40
+Epsilon 0.7010026249996861
+Total number of actions inside episode:  9569
+Episode reward 8375.179999999997
+Response rate 0.8083204930662558
+Episode:  41
+Epsilon 0.7181002499996783
+Total number of actions inside episode:  9464
+Episode reward 7967.800000000007
+Response rate 0.8031432973805855
+Episode:  42
+Epsilon 0.7351978749996704
+Total number of actions inside episode:  9648
+Episode reward 8650.210000000006
+Response rate 0.8133127889060092
+Episode:  43
+Epsilon 0.7522954999996625
+Total number of actions inside episode:  9432
+Episode reward 8156.530000000001
+Response rate 0.8057935285053929
+Episode:  44
+Epsilon 0.7693931249996546
+Total number of actions inside episode:  9333
+Episode reward 7861.41
+Response rate 0.802773497688752
+Episode:  45
+Epsilon 0.7864907499996467
+Total number of actions inside episode:  9544
+Episode reward 8618.809999999998
+Response rate 0.8105392912172573
+Episode:  46
+Epsilon 0.8035883749996389
+Total number of actions inside episode:  9434
+Episode reward 8415.419999999998
+Response rate 0.8082588597842835
+Episode:  47
+Epsilon 0.820685999999631
+Total number of actions inside episode:  9428
+Episode reward 8361.500000000007
+Response rate 0.8068412942989214
+Episode:  48
+Epsilon 0.8377836249996231
+Total number of actions inside episode:  9534
+Episode reward 8392.620000000006
+Response rate 0.8066563944530046
+Episode:  49
+Epsilon 0.8548812499996152
+Total number of actions inside episode:  9483
+Episode reward 8331.039999999997
+Response rate 0.8077041602465331
+Episode:  50
+Epsilon 0.8719788749996074
+Total number of actions inside episode:  9539
+Episode reward 8594.239999999987
+Response rate 0.8119568567026194
+Episode:  51
+Epsilon 0.8890764999995995
+Total number of actions inside episode:  9434
+Episode reward 8522.140000000005
+Response rate 0.8104160246533127
+Episode:  52
+Epsilon 0.9061741249995916
+Total number of actions inside episode:  9694
+Episode reward 8688.380000000008
+Response rate 0.8118335901386748
+Episode:  53
+Epsilon 0.9232717499995837
+Total number of actions inside episode:  9588
+Episode reward 8661.900000000007
+Response rate 0.8108474576271186
+Episode:  54
+Epsilon 0.9403693749995758
+Total number of actions inside episode:  9559
+Episode reward 8852.910000000002
+Response rate 0.8117719568567026
+Episode:  55
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9505
+Episode reward 8692.129999999997
+Response rate 0.8129429892141756
+Episode:  56
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9571
+Episode reward 8873.980000000001
+Response rate 0.8128197226502312
+Episode:  57
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9705
+Episode reward 8851.519999999997
+Response rate 0.814668721109399
+Episode:  58
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9556
+Episode reward 8545.630000000001
+Response rate 0.8107858243451463
+Episode:  59
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9603
+Episode reward 8722.67
+Response rate 0.8132511556240369
+Episode:  60
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9700
+Episode reward 9052.590000000007
+Response rate 0.8195993836671802
+Episode:  61
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9625
+Episode reward 8794.579999999998
+Response rate 0.8173189522342065
+Episode:  62
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9503
+Episode reward 8732.920000000006
+Response rate 0.8123882896764253
+Episode:  63
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9552
+Episode reward 8843.030000000006
+Response rate 0.8156548536209554
+Episode:  64
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9638
+Episode reward 8863.039999999997
+Response rate 0.8145454545454546
+Episode:  65
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9668
+Episode reward 8912.339999999998
+Response rate 0.8184899845916795
+Episode:  66
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9648
+Episode reward 8990.929999999993
+Response rate 0.8171340523882897
+Episode:  67
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9679
+Episode reward 8863.369999999999
+Response rate 0.816517719568567
+Episode:  68
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9646
+Episode reward 8966.740000000002
+Response rate 0.8200924499229584
+Episode:  69
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9656
+Episode reward 8819.110000000004
+Response rate 0.8169491525423729
+Episode:  70
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9823
+Episode reward 9259.639999999996
+Response rate 0.8234206471494607
+Episode:  71
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9573
+Episode reward 8866.960000000006
+Response rate 0.816271186440678
+Episode:  72
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9499
+Episode reward 8632.020000000002
+Response rate 0.8120184899845917
+Episode:  73
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9731
+Episode reward 8866.369999999999
+Response rate 0.8171340523882897
+Episode:  74
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9528
+Episode reward 8897.570000000002
+Response rate 0.816517719568567
+Episode:  75
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9637
+Episode reward 8969.189999999995
+Response rate 0.818366718027735
+Episode:  76
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9601
+Episode reward 8896.929999999997
+Response rate 0.8176887519260401
+Episode:  77
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9559
+Episode reward 8900.060000000009
+Response rate 0.8172573189522342
+Episode:  78
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9605
+Episode reward 8762.840000000004
+Response rate 0.814175654853621
+Episode:  79
+Epsilon 0.9500023749995714
+Total number of actions inside episode:  9536
+Episode reward 8795.799999999988
+Response rate 0.816764252696456

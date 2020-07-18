@@ -1,0 +1,36 @@
+Episode:  0
+Total number of actions inside episode:  2699
+Episode reward 4746.275025181276
+Response rate 0.6799173980382034
+Episode:  1
+Total number of actions inside episode:  2699
+Episode reward 4596.238419258635
+Response rate 0.6983032873806999
+Episode:  2
+Total number of actions inside episode:  2699
+Episode reward 4694.04628291432
+Response rate 0.6907051282051282
+Episode:  3
+Total number of actions inside episode:  2699
+Episode reward 4748.897762658294
+Response rate 0.6860282574568288
+Episode:  4
+Total number of actions inside episode:  2699
+Episode reward 4527.716748592017
+Response rate 0.6925566343042071
+Episode:  5
+Total number of actions inside episode:  2699
+Episode reward 4544.733551312112
+Response rate 0.6857772877618522
+Episode:  6
+Total number of actions inside episode:  2699
+Episode reward 4439.604109275921
+Response rate 0.6895799236224769
+Episode:  7
+Total number of actions inside episode:  2699
+Episode reward 4757.427112392924
+Response rate 0.7069792221630261
+Episode:  8
+Total number of actions inside episode:  2699
+Episode reward 4865.817225798955
+Response rate 0.7023809523809523

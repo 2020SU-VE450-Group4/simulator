@@ -112,7 +112,6 @@ class Node(object):
             assert driver.onservice is False
         return self.drivers
 
-
     def set_neighbours(self, nodes_list):
         self.neighbours = nodes_list
 
@@ -124,11 +123,14 @@ class Node(object):
         for driver_id in keys:
             driver = self.drivers[driver_id]
             if driver.offline_time < city_time:
+                assert driver.online is True
+                assert driver.onservice is False
                 self.drivers.pop(driver_id)
-
+                self.idle_driver_num -= 1
+                self.offline_driver_num += 1
 
     def remove_driver(self, driver_id):
-        """ Remove the orders that are dispatched to drivers """
+        """ Remove dispatched drivers """
         removed_driver = self.drivers.pop(driver_id, None)
         self.idle_driver_num -= 1
         if removed_driver is None:
@@ -148,24 +150,25 @@ class Node(object):
             order = self.orders[order_id]
             if order.get_wait_time()+order.get_begin_time() < city_time:
                 self.orders.pop(order_id)
+                self.order_num -= 1
                 count += 1
         return count
-
 
     def remove_dispatched_order(self, order_id):
         """ Remove the orders that are dispatched to drivers """
         self.orders.pop(order_id)
+        self.order_num -= 1
 
 
 class Driver(object):
     __slots__ = ("online", "onservice", 'order', 'node', 'city_time', '_driver_id', 'offline_time', 'coordinate', 'pick_up_duration')
 
-    def __init__(self, driver_id, offline_time):
+    def __init__(self, driver_id, city_time, offline_time):
         self.online = True
         self.onservice = False
         self.order = None     # the order this driver is serving
         self.node = None      # the node that contain this driver.
-        self.city_time = 0  # track the current system time
+        self.city_time = city_time  # track the current system time
         self.offline_time = offline_time  # record the offline time of the driver
         self.coordinate = None
         self.pick_up_duration = 0
@@ -202,11 +205,11 @@ class Driver(object):
     def set_city_time(self, city_time):
         self.city_time = city_time
 
-    def set_offline(self):
-        assert self.onservice is False and self.online is True
-        self.online = False
-        self.node.idle_driver_num -= 1
-        self.node.offline_driver_num += 1
+    # def set_offline(self):
+    #     assert self.onservice is False and self.online is True
+    #     self.online = False
+    #     self.node.idle_driver_num -= 1
+    #     self.node.offline_driver_num += 1
 
     def set_online(self):
         assert self.onservice is False
@@ -222,7 +225,6 @@ class Driver(object):
         assert self.online is True
         self.set_order_start(order)
         self.onservice = True
-        self.node.idle_driver_num -= 1
 
     def status_control_eachtime(self, city):
 
@@ -261,6 +263,9 @@ class Order(object):
     def get_begin_position(self):
         return self._begin_p
 
+    def set_begin_position(self, grid):
+        self._begin_p = grid
+
     def get_begin_coordinate(self):
         return self._begin_coordinate
 
@@ -269,6 +274,9 @@ class Order(object):
 
     def get_end_position(self):
         return self._end_p
+
+    def set_end_position(self, grid):
+        self._end_p = grid
 
     def get_end_position_id(self):
         return self._end_p.get_node_index()
@@ -288,8 +296,14 @@ class Order(object):
     def get_duration(self):
         return self._t
 
+    def set_duration(self, new_duration):
+        self._t = new_duration
+
     def get_price(self):
         return self._p
+
+    def set_price(self, p):
+        self._p = p
 
     def get_wait_time(self):
         return self._waiting_time

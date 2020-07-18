@@ -25,7 +25,7 @@ RANDOM_SEED = 0  # unit test use this random seed.
 class CityReal:
 
     def __init__(self, all_grids, neighbour_dict, start_time_string, real_bool, coordinate_based, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
-                 init_idle_driver, working_time_dist, probability=1.0/28, real_orders="", order_generation_interval=600):
+                 init_idle_driver, working_time_dist, probability=1.0/28, real_orders="", order_generation_interval=600, driver_online_interval = 3600):
         """
         :param all_grids: a list of hexagon grid ids
         :param neighbour_dict: a dict of {gridID: neighbour grid list} of radius 1 and 2
@@ -69,7 +69,7 @@ class CityReal:
             for radius in range(2):
                 neighbour.append([])
                 for idx in range(len(neighbour_dict[grid_id][radius])):
-                    neighbour[radius].append(self.grids[neighbour_dict[grid_id][radius][idx]])
+                    neighbour[radius].append(self.grids[str(neighbour_dict[grid_id][radius][idx])])
             grid.set_neighbours(neighbour)
 
         self.start_time = start_time_string  # e.g. "2016/11/01 10:00:00"
@@ -90,17 +90,47 @@ class CityReal:
 
         self.drivers = {}  # driver[driver_id] = driver_instance, driver_id start from 0
         self.onservice_drivers = {}
-        self.n_drivers = 0  # total idle number of drivers. online and not on service.
+        self.n_drivers = 0  # total number of drivers
         self.n_offline_drivers = 0  # total number of offline drivers.
         self.init_idle_driver = init_idle_driver
         self.working_time_dist = working_time_dist
+        self.driver_online_interval = driver_online_interval
 
         self.real_orders = real_orders
-
 
         self.p = probability   # sample probability
 
         self.day_orders = []  # one day's order.
+
+    # For check use.
+    def check_all_drivers_in_grids(self):
+        num_idle_drivers = 0
+        num_offline_drivers = 0
+        num_onservice_drivers = len(self.onservice_drivers)
+        for grid_id, grid in self.grids.items():
+            num_idle_drivers += grid.idle_driver_num
+            num_offline_drivers += grid.offline_driver_num
+
+        sum_ = num_idle_drivers + num_offline_drivers + num_onservice_drivers
+        num_total_drivers = self.n_drivers
+        if sum_ != num_total_drivers:
+            print("Error: sum_ = %d, num_total_drivers = %d." % (sum_, num_total_drivers))
+            # print("In the grid %s, sum_ = %d, num_total_drivers = %d." % (grid_id, sum_, num_total_drivers))
+        else:
+            print("The drivers in all grids are correct now.")
+            # print("sum_ = %d, num_total_drivers = %d." % (sum_, num_total_drivers))
+
+    def check_idle_drivers_in_grids(self):
+        flag = True
+        for grid_id, grid in self.grids.items():
+            if grid.idle_driver_num != len(grid.drivers) or grid.order_num != len(grid.orders):
+                flag = False
+                print("In the grid %s, idle_driver_num = %d, but length of drivers is %d." %(grid_id, grid.idle_driver_num, len(grid.drivers)))
+                print("In the grid %s, order_num = %d, but length of orders is %d." % (
+                grid_id, grid.order_num, len(grid.orders)))
+        if flag:
+            print("The idle driver in each grid is correct now.")
+
 
     def get_observation(self):
         next_state = np.zeros((2, self.n_grids))   # 原来的代码像CNN一样活着，我们就暂时不必了，我们直接铺开。。。不用geographical info了
@@ -209,7 +239,7 @@ class CityReal:
 
         """
         # initialization drivers according to the distribution at time 0
-        self.utility_add_driver_real_new()
+        self.utility_init_driver_real_new()
 
         # generate orders at first time step
         if self.real_bool is False:
@@ -235,6 +265,7 @@ class CityReal:
         self.n_orders = 0
         self.expired_order = 0
         self.drivers = {}  # driver[driver_id] = driver_instance  , driver_id start from 0
+        self.onservice_drivers = {}
         self.n_drivers = 0  # total idle number of drivers. online and not on service.
         self.n_offline_drivers = 0  # total number of offline drivers.
         for key, grid in self.grids.items():
@@ -242,14 +273,14 @@ class CityReal:
                 grid.clean_node()
 
         # Generate order.
-        if generate_order_real is False:
+        if self.real_bool is False:
             # Init orders of current time step
             moment = int(self.city_time / self.order_generation_interval)
             self.step_bootstrap_order(self.order_num_dist[moment])
         else:
             self.utility_real_oneday_order()
         # Init current driver distribution
-        self.utility_add_driver_real_new()
+        self.utility_init_driver_real_new()
         return self.get_observation_neighbour()
 
     def step_add_finished_drivers(self):
@@ -259,7 +290,7 @@ class CityReal:
         keys = list(self.onservice_drivers.keys())
         for driver_id in keys:
             driver = self.onservice_drivers[driver_id]
-            # assert driver.city_time == self.city_time
+            assert driver.city_time == self.city_time
             assert driver.onservice is True
             assert driver.online is True
             order_end_time = driver.order.get_assigned_time() + driver.order.get_duration()
@@ -338,11 +369,9 @@ class CityReal:
 
     def step_dispatch(self, dispatch_actions):
         """ Execute dispatch actions
-        TODO: define pickup process since driver may be in a different grid from the order
         :param dispatch_actions: in the form of (driver_grid_id, driver_id, order_grid_id, order_id, order)
-                                 if the order is a real order, we only specify order_grid_id and order_id, and order is None
                                  if the order is an idle action or a reposition action,
-                                    order_grid_id and order_id are None, and order is used to specify the destination (an self-created order object!)
+                                    order_id is None, and order object is used to specify the destination (an self-created order object!)
         """
         dispatched_drivers = []
         for action in dispatch_actions:
@@ -355,18 +384,33 @@ class CityReal:
                 raise ValueError('Step_dispatch: Dispatched a driver not in the grid')
             driver = driver_grid.drivers[driver_id]
 
-            if order is not None:  # the case of idle or reposition
-                order_grid = order.get_begin_position()
-                # assert order_grid == driver_grid
-            else:  # it is a real order inside the simulator
-                if order_grid_id not in self.grids:
-                    raise ValueError('Step_dispatch: Order grid id error')
-                order_grid = self.grids[order_grid_id]
-                if order_id not in order_grid.orders:
-                    raise ValueError('Step_dispatch: Assigned order does not exist in the grid')
-                order = order_grid.orders[order_id]
+            if order_grid_id not in self.grids:
+                raise ValueError('Step_dispatch: Order grid id error')
+            order_grid = self.grids[order_grid_id]
+            if order_id is not None and order_id not in order_grid.orders:  # if order_id is None, it is idle or reposition action
+                raise ValueError('Step_dispatch: Assigned order does not exist in the grid')
+            elif order_id is not None:
+                order_ = order_grid.orders[order_id]
+                assert order_ == order
 
-            driver.take_order(order)
+            # deal with pick-up process
+            if driver_grid_id != order_grid_id:
+                original_duration = order.get_duration()
+                pickup_duration = 180
+                if driver_grid_id in self.transition_trip_time_dict and \
+                        order_grid_id in self.transition_trip_time_dict[driver_grid_id]:
+                    pickup_duration = self.transition_trip_time_dict[driver_grid_id][order_grid_id][0]
+                order.set_duration(original_duration + pickup_duration)
+            # deal with order cancellation
+            if driver_grid_id != order_grid_id and order_id is not None and np.random.uniform() < 0.05783:  # the passenger cancel the order
+                order.set_duration(0)
+                order.set_begin_position(driver_grid)
+                order.set_end_position(driver_grid)
+                order.set_price(0)
+                # print("The order is cancelled and its driver id is: %d." % driver_id)
+            # if order_id is not None:
+            #     print("Driver %d take order %d" % (driver_id, order_id))
+            driver.take_order(order)  # take order normally
             dispatched_drivers.append(driver)
             order.set_assigned_time(self.city_time)
             self.onservice_drivers[driver_id] = driver
@@ -400,24 +444,41 @@ class CityReal:
             if moment not in self.order_num_dist:
                 raise KeyError("KeyError: the current moment does not exist in order_num_dist")
             self.step_bootstrap_order(self.order_num_dist[moment])
-        # TODO: add new drivers
-
+        if self.city_time % self.driver_online_interval == 0:
+            self.utility_add_driver_real_new()
         self.step_driver_offline_nodewise()
         self.step_remove_unfinished_orders()   # remove the orders with
         next_state = self.get_observation_neighbour()
         return next_state, reward, info
 
+    def utility_init_driver_real_new(self):
+        n_total_drivers = len(self.drivers.keys())
+        new_driver_count = 0
+        time_start = self.city_time - 2*60*60  # 2h
+        for t in self.init_idle_driver:
+            if time_start <= t <= self.city_time:
+                for grid_id, value in self.init_idle_driver[t].items():
+                    for i in range(value//10):  # ignore // 10 here
+                        added_driver_id = n_total_drivers + new_driver_count
+                        online_duration = np.random.choice(range(1, len(self.working_time_dist)+1), p=self.working_time_dist) * 1000
+                        if t + online_duration > self.city_time:
+                            new_driver_count += 1
+                            self.drivers[added_driver_id] = Driver(added_driver_id, self.city_time, t + online_duration)
+                            self.drivers[added_driver_id].set_position(self.grids[str(grid_id)])
+                            self.grids[str(grid_id)].add_driver(added_driver_id, self.drivers[added_driver_id])
+        self.n_drivers += new_driver_count
+
     def utility_add_driver_real_new(self):
         n_total_drivers = len(self.drivers.keys())
         new_driver_count = 0
-        for grid_id, value in self.init_idle_driver.items():
-            for i in range(value):
+        for grid_id, value in self.init_idle_driver[self.city_time].items():
+            for i in range(value // 10):  # ignore // 10 here
                 added_driver_id = n_total_drivers + new_driver_count
                 new_driver_count += 1
-                online_duration = np.random.choice(range(1, len(self.working_time_dist)+1), p=self.working_time_dist) * 1000
-                self.drivers[added_driver_id] = Driver(added_driver_id, self.city_time+online_duration)
-                self.drivers[added_driver_id].set_position(self.grids[grid_id])
-                self.grids[grid_id].add_driver(added_driver_id, self.drivers[added_driver_id])
+                online_duration = np.random.choice(range(1, len(self.working_time_dist) + 1), p=self.working_time_dist) * 1000
+                self.drivers[added_driver_id] = Driver(added_driver_id, self.city_time, self.city_time + online_duration)
+                self.drivers[added_driver_id].set_position(self.grids[str(grid_id)])
+                self.grids[str(grid_id)].add_driver(added_driver_id, self.drivers[added_driver_id])
         self.n_drivers += new_driver_count
 
     def utility_real_oneday_order(self):
@@ -425,9 +486,10 @@ class CityReal:
         for order in self.real_orders:
             # here order is in the format of start_grid_id, start_time, end_grid_id, trip_time, price, start_lng, start_lat, end_lng, end_lat
             if int(order[1]) >= self.city_time:
-                start_grid = self.grids[order[0]]
-                end_grid = self.grids[order[2]]
+                start_grid = self.grids[str(order[0])]
+                end_grid = self.grids[str(order[2])]
                 start_grid.add_order(new_order_count + self.n_orders, int(order[1]), end_grid, int(order[3]), float(order[4]))  # can specify wait time here
                 new_order_count += 1
+        self.n_orders += new_order_count
 
 

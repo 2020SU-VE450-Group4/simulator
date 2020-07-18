@@ -9,10 +9,14 @@ def np_move_avg(a,n,mode="same"):
     return a_
 
 
-with open('out.txt', 'r') as f:
+with open('dqn/trial_3', 'r') as f:
     lines = f.readlines()
 
-reward = [int(line.split()[3]) for line in lines]
+reward = []
+for line in lines:
+    if line[0:14] == "Episode reward":
+        reward.append(float(line.split()[2]))
+
 
 fig, axes = plt.subplots(1, 2)
 axes[0].plot(reward)
