@@ -188,8 +188,10 @@ def main():
     parser = argparse.ArgumentParser(description='Planning and Learning dispatch')
     parser.add_argument('--value', type=str, default="V0104mean.pkl",
                         help='state value *.pkl') 
-    parser.add_argument('--sample', type=int, default=0.3,
+    parser.add_argument('--sample', type=float, default=0.3,
                         help='number of sample drivers for km') 
+    parser.add_argument('--episode', type=float, default=1,
+                        help='number of iterations') 
     parser.add_argument('--local', type=bool, default=False,
                         help='local test ot real world') 
     args = parser.parse_args()
@@ -205,16 +207,20 @@ def main():
                       transition_prob_dict=transition_prob_dict, transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
                      init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
     
-    for episode in range(1):
+    for episode in range(args.episode):
         s = myCity.reset_clean(city_time="2016/11/01 10:00:00")
         
         episode_reward = 0
         while True:
             print("Time: ", myCity.city_time )
-            # print_state(s) 
-            print_info(s)
+            print_state(s) 
+            # print_info(s)
             # write a simple pairing within each grid here
             action = dispatch(s, args.sample)
+            for a in action:
+                match_t.append(myCity.city_time)
+                match_d.append(a[1])
+                match_o.append(a[3])
             print("Action: ", action)
             s_, reward, info = myCity.step(action)
             print(reward)
