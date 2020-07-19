@@ -102,17 +102,17 @@ def calc_tp(timestamp):
 
 def print_state(s): 
     for grid_id, state in s.items():
-        if grid_id % 10 == 0:
+        if grid_id % 1 == 0:
             # [(loc, time), orders, neighbour_drivers]
             (loc, time), orders, drivers = state
             print("Orders/ Drivers from Grid ", grid_id)
             # ("Driver:", self._driver_id, self.node.get_node_index(), self.online, self.onservice, self.offline_time)
-            # for o in orders:
-            #    o.print_order()
+            for o in orders:
+                o.print_order()
             #    break
             # ("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
-            #for d in drivers:
-            #    d.print_driver()
+            for d in drivers:
+                d.print_driver()
             #    break
             print("Number of drivers", len(drivers))
             print("Number of orders", len(orders))
@@ -138,7 +138,8 @@ def main():
     with open("reward.json", "r") as fp:
         transition_reward_dict = json.load(fp)
     
-    with open("driver_distribution_dict.pkl", "rb") as pk:
+    # with open("driver_distribution_dict.pkl", "rb") as pk:
+    with open("20161101_drivers", "rb") as pk:
         init_idle_driver = pickle.load(pk)
     
     with open("time_distribution_1000.pkl", "rb") as pk:
@@ -152,6 +153,8 @@ def main():
                         help='state value *.pkl') 
     parser.add_argument('--sample', type=int, default=0.3,
                         help='number of sample drivers for km') 
+    parser.add_argument('--local', type=bool, default=False,
+                        help='local test ot real world') 
     args = parser.parse_args()
     with open(args.value, "rb") as pk:
         global value_map
@@ -161,7 +164,7 @@ def main():
     os.chdir('../')
     
     end_time = int(time.mktime(datetime.strptime("2016/11/01 11:29:58", "%Y/%m/%d %H:%M:%S").timetuple()))  # can change the end time here
-    myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", real_bool=True, coordinate_based=False, order_num_dist=order_num_dist,
+    myCity = CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", real_bool=args.local, coordinate_based=False, order_num_dist=order_num_dist,
                       transition_prob_dict=transition_prob_dict, transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
                      init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
     
@@ -172,7 +175,7 @@ def main():
         while True:
             print("Time: ", myCity.city_time )
             print("Time: ", myCity.city_time, file=fnew_out)
-            
+            print_state(s) 
             # write a simple pairing within each grid here
             action = dispatch(s)
             print("Action: ", action)
@@ -181,7 +184,7 @@ def main():
             print(reward)
             print(reward, file=fnew_out)
             s = s_ 
-            print_state(s) 
+            
             if isinstance(reward, dict):
                 global_reward = myCity.get_global_reward(reward)
                 episode_reward += global_reward
