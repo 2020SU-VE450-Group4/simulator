@@ -1,4 +1,3 @@
-
 import os, time
 from datetime import datetime
 from random import sample 
@@ -11,7 +10,9 @@ from model import km
 import json
 import pickle
 import argparse
-
+import pandas as pd
+ 
+ 
 
 def get_dispatch_observ(s, num_sample):
     
@@ -116,6 +117,43 @@ def print_state(s):
         print("Number of drivers", len(drivers))
         print("Number of orders", len(orders))
 
+
+order_used = {}
+driver_used = {}
+d_time = []
+d_grid = []
+d_id = []
+o_time = []
+o_grid = []
+o_id = []
+o_price = []
+o_wait = []
+match_t = []
+match_d = []
+match_o = []
+match_p = []
+
+
+def print_info(s):
+    for driver, [(loc, t), orders, drivers] in s.items():
+        if driver not in driver_used.keys():
+            driver_used[driver] = {}
+        if t not in driver_used[driver].keys():
+            driver_used[driver][t] = loc.get_node_index()
+            d_time.append(t)
+            d_grid.append(loc.get_node_index())
+            d_id.append(driver)
+        for order in orders:
+            if order.order_id not in order_used.keys():
+                order_used[order.order_id] = {}
+            if t not in order_used[order.order_id].keys():
+                order_used[order.order_id][t] = order.get_begin_position_id()
+                o_time.append(t)
+                o_grid.append(order.get_begin_position_id())
+                o_id.append(order.order_id)
+                o_price.append(order.get_price())
+                o_wait.append(t - order.get_begin_time())
+                
 def main():
     os.chdir('tests/')
     # load all needed files
@@ -173,15 +211,13 @@ def main():
         episode_reward = 0
         while True:
             print("Time: ", myCity.city_time )
-            print("Time: ", myCity.city_time, file=fnew_out)
-            print_state(s) 
+            # print_state(s) 
+            print_info(s)
             # write a simple pairing within each grid here
             action = dispatch(s, args.sample)
             print("Action: ", action)
-            print("Action: ", action, file=fnew_out)
             s_, reward, info = myCity.step(action)
             print(reward)
-            print(reward, file=fnew_out)
             s = s_ 
             
             if isinstance(reward, dict):
@@ -192,12 +228,20 @@ def main():
             if myCity.city_time >= end_time:
                 break
         print("Episode reward", episode_reward)
-        print("Episode reward", episode_reward, file=fnew_out)
         print("Response rate", myCity.expired_order/myCity.n_orders)
-        print("Response rate", myCity.expired_order / myCity.n_orders, file=fnew_out)
 
 
 if __name__ == '__main__':
-    fnew_out = open("new_output.txt", 'w+')
     main()
-    fnew_out.close()
+    data = {"time": d_time, "grid": d_grid, "id": d_id}
+    driver_df = pd.DataFrame(data)
+    with open('driver_df_km.pkl', 'wb') as f:
+        pickle.dump(driver_df, f)
+    data = {"time": o_time, "grid": o_grid, "id": o_id, "price": o_price, "wait": o_wait}
+    order_df = pd.DataFrame(data)
+    with open('order_df_km.pkl', 'wb') as f:
+        pickle.dump(order_df, f)
+    data = {"time": match_t, "driver": match_d, "order": match_o, "reward": match_p}
+    match_df = pd.DataFrame(data)
+    with open('match_df_km.pkl', 'wb') as f:
+        pickle.dump(match_df, f)
