@@ -17,6 +17,7 @@ def get_dispatch_observ(s, num_sample):
     
     dispatch_observ = []
     order_dict = {}
+    order_dict_pos = {}
     driver_dict = {}
     for grid_id, state in s.items():
         _, orders, drivers = state
@@ -24,21 +25,22 @@ def get_dispatch_observ(s, num_sample):
         for d in drivers:
             driver_dict[d._driver_id] = d.node.get_node_index()
         for o in orders:
-            order_dict[o.order_id] = o.get_begin_position_id()
-    
-    return dispatch_observ, driver_dict, order_dict
+            order_dict_pos[o.order_id] = o.get_begin_position_id()
+            order_dict[o.order_id] = o
+     
+    return dispatch_observ, driver_dict, order_dict_pos, order_dict
 
 
 def dispatch(s, num_sample=0.3):
     """
     State input given by get_observation_verbose
     """
-    dispatch_observ, driver_dict, order_dict = get_dispatch_observ(s, num_sample)
+    dispatch_observ, driver_dict, order_dict_pos, order_dict = get_dispatch_observ(s, num_sample)
     res = km_dispatch(dispatch_observ)
     
     dispatch_action = []
     for order_driver_v in res:
-        dispatch_action.append([driver_dict[order_driver_v[1]], order_driver_v[1], order_dict[order_driver_v[0]], order_driver_v[0], None  ])
+        dispatch_action.append([driver_dict[order_driver_v[1]], order_driver_v[1], order_dict_pos[order_driver_v[0]], order_driver_v[0], order_dict[order_driver_v[0]]  ])
     
     # action as the form driver's grid id, driver id, order's grid id, order id, order (for virtual)
     return dispatch_action
@@ -65,6 +67,7 @@ def order_driver_bigraph(orders, drivers, dispatch_observ, num_sample):
             # lack of coordinate info
             pair['order_driver_distance'] = 0 if pair['driver_grid'] == pair['order_start_grid'] else 0
             pair['pick_up_eta'] = pair['order_driver_distance']
+            pair['order'] = o
             dispatch_observ.append(pair)
     return dispatch_observ
 
@@ -76,7 +79,6 @@ def cal_reward(observ):
     
     h_cur, h_dst = observ['order_start_grid'], observ['order_finish_grid']
     t_cur, t_dst = observ['cur_t']  , observ['dst_t']
-
     
     adv = value_map[h_dst][t_dst] * gamma**dur + rw - value_map[h_cur][t_cur]
     # cancel_rate = observ['cancel_rate'] 
@@ -102,20 +104,17 @@ def calc_tp(timestamp):
 
 def print_state(s): 
     for grid_id, state in s.items():
-        if grid_id % 1 == 0:
-            # [(loc, time), orders, neighbour_drivers]
-            (loc, time), orders, drivers = state
-            print("Orders/ Drivers from Grid ", grid_id)
-            # ("Driver:", self._driver_id, self.node.get_node_index(), self.online, self.onservice, self.offline_time)
-            for o in orders:
-                o.print_order()
-            #    break
-            # ("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
-            for d in drivers:
-                d.print_driver()
-            #    break
-            print("Number of drivers", len(drivers))
-            print("Number of orders", len(orders))
+        # [(loc, time), orders, neighbour_drivers]
+        (loc, time), orders, drivers = state
+        print("Orders/ Drivers from Grid ", grid_id)
+        # ("Driver:", self._driver_id, self.node.get_node_index(), self.online, self.onservice, self.offline_time)
+        for o in orders:
+            o.print_order()
+        # ("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
+        for d in drivers:
+            d.print_driver()
+        print("Number of drivers", len(drivers))
+        print("Number of orders", len(orders))
 
 def main():
     os.chdir('tests/')
@@ -177,7 +176,7 @@ def main():
             print("Time: ", myCity.city_time, file=fnew_out)
             print_state(s) 
             # write a simple pairing within each grid here
-            action = dispatch(s)
+            action = dispatch(s, args.sample)
             print("Action: ", action)
             print("Action: ", action, file=fnew_out)
             s_, reward, info = myCity.step(action)
