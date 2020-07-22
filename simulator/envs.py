@@ -21,11 +21,17 @@ logger_ch.setFormatter(logging.Formatter(
 logger.addHandler(logger_ch)
 RANDOM_SEED = 0  # unit test use this random seed.
 
+RUN_SAMPLE_SCALE = True
+global CONST
+if RUN_SAMPLE_SCALE:
+    CONST = {"reposition_time": 180*6, "driver_online_interval": 3600, "driver_ratio": 1/10}
+else:
+    CONST = {"reposition_time": 180, "driver_online_interval": 600, "driver_ratio": 1}
 
 class CityReal:
 
     def __init__(self, all_grids, neighbour_dict, start_time_string, real_bool, coordinate_based, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
-                 init_idle_driver, working_time_dist, probability=1.0/28, real_orders="", order_generation_interval=600, driver_online_interval = 3600):
+                 init_idle_driver, working_time_dist, probability=1.0/28, real_orders="", order_generation_interval=600, driver_online_interval=600):
         """
         :param all_grids: a list of hexagon grid ids
         :param neighbour_dict: a dict of {gridID: neighbour grid list} of radius 1 and 2
@@ -87,6 +93,7 @@ class CityReal:
         self.transition_reward_dict = transition_reward_dict
         self.distribution_name = "Poisson"
         self.expired_order = 0
+        self.expired_order_price = 0
 
         self.drivers = {}  # driver[driver_id] = driver_instance, driver_id start from 0
         self.onservice_drivers = {}
@@ -264,6 +271,7 @@ class CityReal:
         # clean orders and drivers
         self.n_orders = 0
         self.expired_order = 0
+        self.expired_order_price = 0
         self.drivers = {}  # driver[driver_id] = driver_instance  , driver_id start from 0
         self.onservice_drivers = {}
         self.n_drivers = 0  # total idle number of drivers. online and not on service.
@@ -334,38 +342,6 @@ class CityReal:
             if grid is not None:
                 self.expired_order += grid.remove_unfinished_order(self.city_time)
 
-    def step_pre_order_assigin(self, next_state):
-
-        remain_drivers = next_state[0] - next_state[1]
-        remain_drivers[remain_drivers < 0] = 0
-
-        remain_orders = next_state[1] - next_state[0]
-        remain_orders[remain_orders < 0] = 0
-
-        if np.sum(remain_orders) == 0 or np.sum(remain_drivers) == 0:
-            context = np.array([remain_drivers, remain_orders])
-            return context
-
-        remain_orders_1d = remain_orders.flatten()
-        remain_drivers_1d = remain_drivers.flatten()
-
-        for node in self.nodes:
-            if node is not None:
-                curr_node_id = node.get_node_index()
-                if remain_orders_1d[curr_node_id] != 0:
-                    for neighbor_node in node.neighbors:
-                        if neighbor_node is not None:
-                            neighbor_id = neighbor_node.get_node_index()
-                            a = remain_orders_1d[curr_node_id]
-                            b = remain_drivers_1d[neighbor_id]
-                            remain_orders_1d[curr_node_id] = max(a-b, 0)
-                            remain_drivers_1d[neighbor_id] = max(b-a, 0)
-                        if remain_orders_1d[curr_node_id] == 0:
-                            break
-
-        context = np.array([remain_drivers_1d.reshape(self.M, self.N),
-                   remain_orders_1d.reshape(self.M, self.N)])
-        return context
 
     def step_dispatch(self, dispatch_actions):
         """ Execute dispatch actions
@@ -396,13 +372,14 @@ class CityReal:
             # deal with pick-up process
             if driver_grid_id != order_grid_id:
                 original_duration = order.get_duration()
-                pickup_duration = 180
-                if driver_grid_id in self.transition_trip_time_dict and \
-                        order_grid_id in self.transition_trip_time_dict[driver_grid_id]:
-                    pickup_duration = self.transition_trip_time_dict[driver_grid_id][order_grid_id][0]
+                pickup_duration = CONST["reposition_time"]
+                # if driver_grid_id in self.transition_trip_time_dict and \
+                #         order_grid_id in self.transition_trip_time_dict[driver_grid_id]:
+                #     pickup_duration = self.transition_trip_time_dict[driver_grid_id][order_grid_id][0]
                 order.set_duration(original_duration + pickup_duration)
             # deal with order cancellation
-            if driver_grid_id != order_grid_id and order_id is not None and np.random.uniform() < 0.05783:  # the passenger cancel the order
+            if driver_grid_id != order_grid_id and order_id is not None and np.random.uniform() < 0.05783:
+                # the passenger cancel the order
                 order.set_duration(0)
                 order.set_begin_position(driver_grid)
                 order.set_end_position(driver_grid)
@@ -458,7 +435,7 @@ class CityReal:
         for t in self.init_idle_driver:
             if time_start <= t <= self.city_time:
                 for grid_id, value in self.init_idle_driver[t].items():
-                    for i in range(value//10):  # ignore // 10 here
+                    for i in range(int(value*CONST["driver_ratio"])):  # ignore // 10 here
                         added_driver_id = n_total_drivers + new_driver_count
                         online_duration = np.random.choice(range(1, len(self.working_time_dist)+1), p=self.working_time_dist) * 1000
                         if t + online_duration > self.city_time:
@@ -472,10 +449,11 @@ class CityReal:
         n_total_drivers = len(self.drivers.keys())
         new_driver_count = 0
         for grid_id, value in self.init_idle_driver[self.city_time].items():
-            for i in range(value // 10):  # ignore // 10 here
+            for i in range(int(value*CONST["driver_ratio"])):  # ignore // 10 here
                 added_driver_id = n_total_drivers + new_driver_count
                 new_driver_count += 1
                 online_duration = np.random.choice(range(1, len(self.working_time_dist) + 1), p=self.working_time_dist) * 1000
+                assert added_driver_id not in self.drivers
                 self.drivers[added_driver_id] = Driver(added_driver_id, self.city_time, self.city_time + online_duration)
                 self.drivers[added_driver_id].set_position(self.grids[str(grid_id)])
                 self.grids[str(grid_id)].add_driver(added_driver_id, self.drivers[added_driver_id])

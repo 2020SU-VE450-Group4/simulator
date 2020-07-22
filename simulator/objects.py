@@ -102,7 +102,7 @@ class Node(object):
     def get_active_orders(self, citytime):
         active_orders = []
         for order_id, order in self.orders.items():
-            if order.get_begin_time() < citytime:
+            if order.get_begin_time() <= citytime:
                 active_orders.append(order)
         return active_orders
 
@@ -122,9 +122,10 @@ class Node(object):
         keys = list(self.drivers.keys())
         for driver_id in keys:
             driver = self.drivers[driver_id]
-            if driver.offline_time < city_time:
+            if driver.offline_time <= city_time:
                 assert driver.online is True
                 assert driver.onservice is False
+                driver.online = False
                 self.drivers.pop(driver_id)
                 self.idle_driver_num -= 1
                 self.offline_driver_num += 1
@@ -152,6 +153,7 @@ class Node(object):
                 self.orders.pop(order_id)
                 self.order_num -= 1
                 count += 1
+                # print(order.get_price())
         return count
 
     def remove_dispatched_order(self, order_id):
