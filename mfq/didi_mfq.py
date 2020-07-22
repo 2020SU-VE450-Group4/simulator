@@ -92,15 +92,16 @@ class MFQ(object):
     def choose_action(self, _s, _actions, epsilon):
         values = []
         for a in _actions:
+            # print(a)
             x = torch.unsqueeze(torch.tensor(_s + a, dtype=torch.float), 0)  # add dimension at 0
             values.append(self.eval_net.forward(x).data.numpy().flatten()[0])
 
         b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
         probs = np.exp(b_val) / np.sum(np.exp(b_val))
-        # print(s, rankings, probs)
-        _a = np.random.choice(actions, p=probs)
+        # print(s, rankings, probs))
+        idx = np.random.choice(len(_actions), p=probs)
+        _a = _actions[idx]
         return _a
-
 
     def calculate_mf(self, _s, actions):
         values = []
@@ -120,11 +121,15 @@ class MFQ(object):
         self.memory[index, :] = transition
         self.memory_counter += 1
 
+    def soft_update(self, local_model, target_model, tau):
+        for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+            target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
+
     def learn(self):
         # target parameter update
         if self.learn_step_counter % TARGET_REPLACE_ITER == 0:
             # self.target_net.load_state_dict(self.eval_net.state_dict())
-            self.target_net.state_dict().data.copy_(TAU * self.eval_net.state_dict().data + (1.0 - TAU) * self.target_net.state_dict().data)
+            self.soft_update(self.eval_net, self.target_net, TAU)
 
         self.learn_step_counter += 1
 
