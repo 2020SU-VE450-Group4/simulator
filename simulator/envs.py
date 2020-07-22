@@ -4,12 +4,6 @@ sys.path.append("../")
 
 from simulator.objects import *
 from simulator.utilities import *
-# from algorithm import *
-
-# current_time = time.strftime("%Y%m%d_%H-%M")
-# log_dir = "/nfs/private/linkaixiang_i/data/dispatch_simulator/experiments/"+current_time + "/"
-# mkdir_p(log_dir)
-# logging.basicConfig(filename=log_dir +'logger_env.log', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -462,15 +456,12 @@ class CityReal:
     def utility_real_oneday_order(self):
         new_order_count = 0
         for order in self.real_orders:
-            try:
             # here order is in the format of start_grid_id, start_time, end_grid_id, trip_time, price, start_lng, start_lat, end_lng, end_lat
-                if int(order[1]) >= self.city_time:
-                    start_grid = self.grids[str(order[0])]
-                    end_grid = self.grids[str(order[2])]
-                    start_grid.add_order(new_order_count + self.n_orders, int(order[1]), end_grid, int(order[3]), float(order[4]))  # can specify wait time here
-                    new_order_count += 1
-            except:
-                print("Error unknown order")
+            if int(order[1]) >= self.city_time:
+                start_grid = self.grids[str(order[0])]
+                end_grid = self.grids[str(order[2])]
+                start_grid.add_order(new_order_count + self.n_orders, int(order[1]), end_grid, int(order[3]), float(order[4]))  # can specify wait time here
+                new_order_count += 1
         self.n_orders += new_order_count
 
 
