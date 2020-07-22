@@ -1,4 +1,3 @@
-
 import os, time
 from datetime import datetime
 from random import sample 
@@ -11,12 +10,15 @@ from model import km
 import json
 import pickle
 import argparse
-
+import pandas as pd
+ 
+ 
 
 def get_dispatch_observ(s, num_sample):
     
     dispatch_observ = []
     order_dict = {}
+    order_dict_pos = {}
     driver_dict = {}
     for grid_id, state in s.items():
         _, orders, drivers = state
@@ -24,21 +26,22 @@ def get_dispatch_observ(s, num_sample):
         for d in drivers:
             driver_dict[d._driver_id] = d.node.get_node_index()
         for o in orders:
-            order_dict[o.order_id] = o.get_begin_position_id()
-    
-    return dispatch_observ, driver_dict, order_dict
+            order_dict_pos[o.order_id] = o.get_begin_position_id()
+            order_dict[o.order_id] = o
+     
+    return dispatch_observ, driver_dict, order_dict_pos, order_dict
 
 
 def dispatch(s, num_sample=0.3):
     """
     State input given by get_observation_verbose
     """
-    dispatch_observ, driver_dict, order_dict = get_dispatch_observ(s, num_sample)
+    dispatch_observ, driver_dict, order_dict_pos, order_dict = get_dispatch_observ(s, num_sample)
     res = km_dispatch(dispatch_observ)
     
     dispatch_action = []
     for order_driver_v in res:
-        dispatch_action.append([driver_dict[order_driver_v[1]], order_driver_v[1], order_dict[order_driver_v[0]], order_driver_v[0], None  ])
+        dispatch_action.append([driver_dict[order_driver_v[1]], order_driver_v[1], order_dict_pos[order_driver_v[0]], order_driver_v[0], order_dict[order_driver_v[0]]  ])
     
     # action as the form driver's grid id, driver id, order's grid id, order id, order (for virtual)
     return dispatch_action
@@ -65,6 +68,7 @@ def order_driver_bigraph(orders, drivers, dispatch_observ, num_sample):
             # lack of coordinate info
             pair['order_driver_distance'] = 0 if pair['driver_grid'] == pair['order_start_grid'] else 0
             pair['pick_up_eta'] = pair['order_driver_distance']
+            pair['order'] = o
             dispatch_observ.append(pair)
     return dispatch_observ
 
@@ -76,7 +80,6 @@ def cal_reward(observ):
     
     h_cur, h_dst = observ['order_start_grid'], observ['order_finish_grid']
     t_cur, t_dst = observ['cur_t']  , observ['dst_t']
-
     
     adv = value_map[h_dst][t_dst] * gamma**dur + rw - value_map[h_cur][t_cur]
     # cancel_rate = observ['cancel_rate'] 
@@ -102,21 +105,55 @@ def calc_tp(timestamp):
 
 def print_state(s): 
     for grid_id, state in s.items():
-        if grid_id % 1 == 0:
-            # [(loc, time), orders, neighbour_drivers]
-            (loc, time), orders, drivers = state
-            print("Orders/ Drivers from Grid ", grid_id)
-            # ("Driver:", self._driver_id, self.node.get_node_index(), self.online, self.onservice, self.offline_time)
-            for o in orders:
-                o.print_order()
-            #    break
-            # ("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
-            for d in drivers:
-                d.print_driver()
-            #    break
-            print("Number of drivers", len(drivers))
-            print("Number of orders", len(orders))
+        # [(loc, time), orders, neighbour_drivers]
+        (loc, time), orders, drivers = state
+        print("Orders/ Drivers from Grid ", grid_id)
+        # ("Driver:", self._driver_id, self.node.get_node_index(), self.online, self.onservice, self.offline_time)
+        for o in orders:
+            o.print_order()
+        # ("Order:", self.order_id, self._begin_p.get_node_index(), self._end_p.get_node_index(), self._begin_t, self._t, self._p)
+        for d in drivers:
+            d.print_driver()
+        print("Number of drivers", len(drivers))
+        print("Number of orders", len(orders))
 
+
+order_used = {}
+driver_used = {}
+d_time = []
+d_grid = []
+d_id = []
+o_time = []
+o_grid = []
+o_id = []
+o_price = []
+o_wait = []
+match_t = []
+match_d = []
+match_o = []
+match_p = []
+
+
+def print_info(s):
+    for driver, [(loc, t), orders, drivers] in s.items():
+        if driver not in driver_used.keys():
+            driver_used[driver] = {}
+        if t not in driver_used[driver].keys():
+            driver_used[driver][t] = loc.get_node_index()
+            d_time.append(t)
+            d_grid.append(loc.get_node_index())
+            d_id.append(driver)
+        for order in orders:
+            if order.order_id not in order_used.keys():
+                order_used[order.order_id] = {}
+            if t not in order_used[order.order_id].keys():
+                order_used[order.order_id][t] = order.get_begin_position_id()
+                o_time.append(t)
+                o_grid.append(order.get_begin_position_id())
+                o_id.append(order.order_id)
+                o_price.append(order.get_price())
+                o_wait.append(t - order.get_begin_time())
+                
 def main():
     os.chdir('tests/')
     # load all needed files
@@ -151,8 +188,10 @@ def main():
     parser = argparse.ArgumentParser(description='Planning and Learning dispatch')
     parser.add_argument('--value', type=str, default="V0104mean.pkl",
                         help='state value *.pkl') 
-    parser.add_argument('--sample', type=int, default=0.3,
+    parser.add_argument('--sample', type=float, default=0.3,
                         help='number of sample drivers for km') 
+    parser.add_argument('--episode', type=float, default=1,
+                        help='number of iterations') 
     parser.add_argument('--local', type=bool, default=False,
                         help='local test ot real world') 
     args = parser.parse_args()
@@ -168,21 +207,23 @@ def main():
                       transition_prob_dict=transition_prob_dict, transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
                      init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list)
     
-    for episode in range(1):
+    for episode in range(args.episode):
         s = myCity.reset_clean(city_time="2016/11/01 10:00:00")
         
         episode_reward = 0
         while True:
             print("Time: ", myCity.city_time )
-            print("Time: ", myCity.city_time, file=fnew_out)
             print_state(s) 
+            # print_info(s)
             # write a simple pairing within each grid here
-            action = dispatch(s)
+            action = dispatch(s, args.sample)
+            for a in action:
+                match_t.append(myCity.city_time)
+                match_d.append(a[1])
+                match_o.append(a[3])
             print("Action: ", action)
-            print("Action: ", action, file=fnew_out)
             s_, reward, info = myCity.step(action)
             print(reward)
-            print(reward, file=fnew_out)
             s = s_ 
             
             if isinstance(reward, dict):
@@ -193,12 +234,20 @@ def main():
             if myCity.city_time >= end_time:
                 break
         print("Episode reward", episode_reward)
-        print("Episode reward", episode_reward, file=fnew_out)
         print("Response rate", myCity.expired_order/myCity.n_orders)
-        print("Response rate", myCity.expired_order / myCity.n_orders, file=fnew_out)
 
 
 if __name__ == '__main__':
-    fnew_out = open("new_output.txt", 'w+')
     main()
-    fnew_out.close()
+    data = {"time": d_time, "grid": d_grid, "id": d_id}
+    driver_df = pd.DataFrame(data)
+    with open('driver_df_km.pkl', 'wb') as f:
+        pickle.dump(driver_df, f)
+    data = {"time": o_time, "grid": o_grid, "id": o_id, "price": o_price, "wait": o_wait}
+    order_df = pd.DataFrame(data)
+    with open('order_df_km.pkl', 'wb') as f:
+        pickle.dump(order_df, f)
+    data = {"time": match_t, "driver": match_d, "order": match_o, "reward": match_p}
+    match_df = pd.DataFrame(data)
+    with open('match_df_km.pkl', 'wb') as f:
+        pickle.dump(match_df, f)
