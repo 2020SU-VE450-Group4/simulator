@@ -89,19 +89,27 @@ class MFQ(object):
         self.optimizer = torch.optim.Adam(self.eval_net.parameters(), lr=LR)
         self.loss_func = nn.MSELoss()
 
-    def choose_action(self, _s, _actions, epsilon):
+    def choose_action(self, _s, _actions):
         values = []
         for a in _actions:
-            # print(a)
             x = torch.unsqueeze(torch.tensor(_s + a, dtype=torch.float), 0)  # add dimension at 0
             values.append(self.eval_net.forward(x).data.numpy().flatten()[0])
 
         b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
         probs = np.exp(b_val) / np.sum(np.exp(b_val))
-        # print(s, rankings, probs))
-        idx = np.random.choice(len(_actions), p=probs)
-        _a = _actions[idx]
+        _a = np.random.choice(len(_actions), p=probs)
         return _a
+
+    def choose_action_max(self, _s, actions):
+        values = []
+        for a in actions:
+            x = torch.unsqueeze(torch.tensor(np.append(_s, a), dtype=torch.float), 0)  # add dimension at 0
+            values.append(self.target_net.forward(x))
+
+        # input only one sample
+        a_ = np.argmax(values)
+        action = actions[a_]
+        return action
 
     def calculate_mf(self, _s, actions):
         values = []
@@ -222,7 +230,7 @@ if __name__ == '__main__':
                                         reposition_duration, price=0))
                 if len(orders):
                     actions = [grid_map[o.get_begin_position_id()] + grid_map[o.get_end_position_id()] for o in orders]
-                    aid = mfq.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions, epsilon)
+                    aid = mfq.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
 
