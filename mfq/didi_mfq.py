@@ -79,20 +79,20 @@ class Net(nn.Module):
 
 class MFQ(object):
     def __init__(self, dim_states, dim_action):
-        self.eval_net, self.target_net = Net(dim_states+dim_action, 1), Net(dim_states+dim_action, 1)
+        self.eval_net, self.target_net = Net(dim_states+dim_action+1, 1), Net(dim_states+dim_action+1, 1)
         # self.eval_net.load_state_dict(torch.load(directory + "/eval_net"))
         # self.target_net.load_state_dict(torch.load(directory + "/target_net"))
 
         self.learn_step_counter = 0                                     # for target updating
         self.memory_counter = 0                                         # for storing memory
-        self.memory = np.zeros((MEMORY_CAPACITY, dim_states * 2 + dim_action*2 + 2))     # initialize memory
+        self.memory = np.zeros((MEMORY_CAPACITY, dim_states * 2 + dim_action*2 + 4))     # initialize memory
         self.optimizer = torch.optim.Adam(self.eval_net.parameters(), lr=LR)
         self.loss_func = nn.MSELoss()
 
-    def choose_action(self, _s, _actions):
+    def choose_action(self, _s, _actions, a_bar):
         values = []
         for a in _actions:
-            x = torch.unsqueeze(torch.tensor(_s + a, dtype=torch.float), 0)  # add dimension at 0
+            x = torch.unsqueeze(torch.tensor(_s + a + [a_bar], dtype=torch.float), 0)  # add dimension at 0
             values.append(self.eval_net.forward(x).data.numpy().flatten()[0])
 
         b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
@@ -100,10 +100,10 @@ class MFQ(object):
         _a = np.random.choice(len(_actions), p=probs)
         return _a
 
-    def choose_action_max(self, _s, actions):
+    def choose_action_max(self, _s, actions, a_bar):
         values = []
         for a in actions:
-            x = torch.unsqueeze(torch.tensor(np.append(_s, a), dtype=torch.float), 0)  # add dimension at 0
+            x = torch.unsqueeze(torch.tensor(np.append(_s, a, a_bar), dtype=torch.float), 0)  # add dimension at 0
             values.append(self.target_net.forward(x))
 
         # input only one sample
@@ -111,19 +111,19 @@ class MFQ(object):
         action = actions[a_]
         return action
 
-    def calculate_mf(self, _s, actions):
+    def calculate_mf(self, _s, actions, a_bar):
         values = []
         for a in actions:
-            x = torch.unsqueeze(torch.tensor(np.append(_s, a), dtype=torch.float), 0)  # add dimension at 0
-            values.append(self.target_net.forward(x))
+            x = torch.unsqueeze(torch.tensor(np.append(_s, a, a_bar), dtype=torch.float), 0)  # add dimension at 0
+            values.append(self.target_net.forward(x).data.numpy().flatten()[0])
 
-        b_val = [-1.0 * val * BETA for val in values]
+        b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
         probs = np.exp(b_val) / np.sum(np.exp(b_val))
         vmf = sum(np.multiply(values, probs))
         return vmf
 
     def store_transition(self, s, a, r, s_, a_, a_bar, v_mf, done):
-        transition = np.hstack((s, a, [r], s_, a_, a_bar, v_mf, done))
+        transition = np.hstack((s, a, [r], s_, a_, [a_bar], [v_mf], done))
         # replace the old memory with new memory
         index = self.memory_counter % MEMORY_CAPACITY
         self.memory[index, :] = transition
@@ -230,7 +230,8 @@ if __name__ == '__main__':
                                         reposition_duration, price=0))
                 if len(orders):
                     actions = [grid_map[o.get_begin_position_id()] + grid_map[o.get_end_position_id()] for o in orders]
-                    aid = mfq.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions)
+                    a_bar = len(drivers) / len(orders)
+                    aid = mfq.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions, a_bar)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
 
@@ -247,9 +248,8 @@ if __name__ == '__main__':
                                              orders[aid].order_id, orders[aid]])
                     if driver in busy_drivers.keys():  # means it has just finished previous order and become idle again
                         _s = grid_map[loc.get_node_index()] + get_time_one_hot(time)
-                        _a = mfq.choose_action_max(_s, actions)
-                        a_bar = len(drivers) / len(orders)
-                        v_mf = mfq.calculate_mf(_s, actions)
+                        _a = mfq.choose_action_max(_s, actions, a_bar)
+                        v_mf = mfq.calculate_mf(_s, actions, a_bar)
                         # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc.get_node_index()], time])
                         ps, pa, pr = busy_drivers[driver]
                         mfq.store_transition(ps, pa, pr, _s, _a, a_bar, v_mf, False)
