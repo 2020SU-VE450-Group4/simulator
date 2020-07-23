@@ -103,7 +103,7 @@ class MFQ(object):
     def choose_action_max(self, _s, actions, a_bar):
         values = []
         for a in actions:
-            x = torch.unsqueeze(torch.tensor(np.append(_s, a, a_bar), dtype=torch.float), 0)  # add dimension at 0
+            x = torch.unsqueeze(torch.tensor(_s + a + [a_bar], dtype=torch.float), 0)  # add dimension at 0
             values.append(self.target_net.forward(x))
 
         # input only one sample
@@ -114,7 +114,7 @@ class MFQ(object):
     def calculate_mf(self, _s, actions, a_bar):
         values = []
         for a in actions:
-            x = torch.unsqueeze(torch.tensor(np.append(_s, a, a_bar), dtype=torch.float), 0)  # add dimension at 0
+            x = torch.unsqueeze(torch.tensor(_s + a + [a_bar], dtype=torch.float), 0)  # add dimension at 0
             values.append(self.target_net.forward(x).data.numpy().flatten()[0])
 
         b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
@@ -148,8 +148,8 @@ class MFQ(object):
             sample_index = np.random.choice(self.memory_counter, size=BATCH_SIZE)
         # sample_index = np.random.choice(MEMORY_CAPACITY, BATCH_SIZE)
         b_memory = self.memory[sample_index, :]
-        state_action = torch.tensor(b_memory[:, :DIM_STATE+DIM_ACTION], dtype=torch.float)
-        reward = torch.tensor(b_memory[:, DIM_STATE+DIM_ACTION:DIM_STATE+DIM_ACTION+1], dtype=torch.float)
+        state_action = torch.tensor(b_memory[:, :DIM_STATE+DIM_ACTION+1], dtype=torch.float)
+        reward = torch.tensor(b_memory[:, DIM_STATE+DIM_ACTION+1:DIM_STATE+DIM_ACTION+2], dtype=torch.float)
         detach_state = torch.tensor(b_memory[:, -DIM_STATE-DIM_ACTION-1:-2], dtype=torch.float)
         v_mf = torch.tensor(b_memory[:, -2], dtype=torch.float)
         done = torch.tensor(b_memory[:, -1], dtype=torch.float)
