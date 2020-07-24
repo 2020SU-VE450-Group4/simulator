@@ -16,9 +16,9 @@ TOTAL_STEPS = 200000
 BATCH_SIZE = 1024
 LR = 0.0001                   # learning rate
 GAMMA = 0.9                 # reward discount
-BETA_START = 1                # exploration rate for Boltzmann equation
+BETA_START = 3                # exploration rate for Boltzmann equation
 BETA_END = 0.01
-BETA_STEP = (BETA_END-BETA_START)/TOTAL_STEPS
+BETA_STEP = 3 * (BETA_END-BETA_START)/TOTAL_STEPS
 TARGET_REPLACE_ITER = 300   # soft target update frequency
 TAU = 0.01                  # soft replacement
 MEMORY_CAPACITY = 80000
@@ -252,7 +252,8 @@ if __name__ == '__main__':
 
             if mfq.memory_counter > BATCH_SIZE:
                 mfq.learn()
-                BETA += BETA_STEP
+                if BETA > BETA_END:
+                    BETA += BETA_STEP
         print("Episode: ", episode)
         print("BETA: ", BETA)
         print("Total number of actions inside episode: ", count)
