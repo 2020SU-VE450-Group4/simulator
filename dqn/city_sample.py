@@ -38,7 +38,7 @@ def create_city():
     with open(directory + "/group_real_order_20161101.pkl", "rb") as pk:
         real_order_list = pickle.load(pk)
 
-    return CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", real_bool=True, coordinate_based=False,
+    return CityReal(all_grids, neighbour_dict, "2016/11/01 10:00:00", end_time_string="2016/11/01 13:59:58", real_bool=True, coordinate_based=False,
                     order_num_dist=order_num_dist, transition_prob_dict=transition_prob_dict,
                     transition_trip_time_dict=transition_trip_time_dict, transition_reward_dict=transition_reward_dict,
                     init_idle_driver=init_idle_driver, working_time_dist=time_dist, real_orders=real_order_list,

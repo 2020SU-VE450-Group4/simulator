@@ -1,3 +1,5 @@
+import sys
+sys.path.append("../")
 import torch
 import torch.nn as nn
 import numpy as np
@@ -25,6 +27,7 @@ DIM_STATE = NUM_GRIDS + NUM_TIME_INTERVAL
 DIM_ACTION = 2 * NUM_GRIDS
 TARGET_DRIVER_ID = 299
 directory = os.path.dirname(__file__)
+filename = 'output'+str(datetime.now())[:19]
 
 
 def get_grid_one_hot(idx, n=1322):
@@ -39,7 +42,7 @@ def get_time_one_hot(t):
     tmp[idx] = 1
     return tmp
 
-
+device = torch.device("cpu")
 env = create_city()
 grid_map = {id: get_grid_one_hot(i, NUM_GRIDS) for i, id in enumerate(env.grid_ids)}
 
@@ -74,7 +77,7 @@ class Net(nn.Module):
 
 class DQN(object):
     def __init__(self, dim_states, dim_action):
-        self.eval_net, self.target_net = Net(dim_states+dim_action, 1), Net(dim_states+dim_action, 1)
+        self.eval_net, self.target_net = Net(dim_states+dim_action, 1).to(device), Net(dim_states+dim_action, 1).to(device)
         # self.eval_net.load_state_dict(torch.load(directory + "/eval_net"))
         # self.target_net.load_state_dict(torch.load(directory + "/target_net"))
 
@@ -144,7 +147,7 @@ class DQN(object):
 
 if __name__ == '__main__':
     dqn = DQN(DIM_STATE, DIM_ACTION)
-    end_time = int(time.mktime(datetime.strptime("2016/11/01 13:59:58", "%Y/%m/%d %H:%M:%S").timetuple()))
+    end_time = env.end_time
     # can change the end time here
 
     print("Start training")
@@ -162,7 +165,10 @@ if __name__ == '__main__':
         # used to wait for collecting information to be inserted into the memory
 
         count = 0
+        # For check use.
+        ###########################################################################################################
         # last_end_node_id = ''
+        ###########################################################################################################
         selected_order = set()
         while env.city_time < end_time:
             # For check use.
@@ -187,7 +193,6 @@ if __name__ == '__main__':
                 #         print("Pass")
                 #     else:
                 #         print("Error in driver location.")
-
                 #######################################################################################################
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)

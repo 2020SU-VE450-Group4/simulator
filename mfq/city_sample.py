@@ -30,6 +30,10 @@ def create_city():
 
     with open(directory + "/time_distribution_1000.pkl", "rb") as pk:
         time_dist = pickle.load(pk)
+        time_dist = time_dist[0:40]  # decrease the overall working time of the drivers, since we have too many drivers
+        s = sum(time_dist)
+        for i in range(len(time_dist)):
+            time_dist[i] /= s
 
     with open(directory + "/group_real_order_20161101.pkl", "rb") as pk:
         real_order_list = pickle.load(pk)

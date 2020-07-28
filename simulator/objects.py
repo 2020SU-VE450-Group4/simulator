@@ -90,13 +90,15 @@ class Node(object):
                                  destination_grid,
                                  city_time,
                                  duration,
-                                 price, wait_time)
+                                 price, wait_time,
+                                 begin_co=begin_co, end_co=end_co)
         else:
             self.orders[order_id] = Order(order_id, self,
                                      destination_grid,
                                      city_time,
                                      duration,
-                                     price)
+                                     price, 600,
+                                     begin_co=begin_co, end_co=end_co)
         self.order_num += 1
 
     def get_active_orders(self, citytime):

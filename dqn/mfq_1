@@ -1,0 +1,169 @@
+Start training
+Episode:  0
+BETA:  0.9821007999999871
+Total number of actions inside episode:  1997
+Episode reward 6402.480000000003
+Response rate 0.8109090909090909
+3068 16225
+Episode:  1
+BETA:  0.9464657499999615
+Total number of actions inside episode:  2080
+Episode reward 7578.310000000004
+Response rate 0.8122033898305084
+3047 16225
+Episode:  2
+BETA:  0.9108306999999358
+Total number of actions inside episode:  1983
+Episode reward 7835.239999999995
+Response rate 0.812080123266564
+3049 16225
+Episode:  3
+BETA:  0.8751956499999102
+Total number of actions inside episode:  1926
+Episode reward 7854.030000000008
+Response rate 0.8117719568567026
+3054 16225
+Episode:  4
+BETA:  0.8395605999998845
+Total number of actions inside episode:  2037
+Episode reward 8008.490000000001
+Response rate 0.8140523882896764
+3017 16225
+Episode:  5
+BETA:  0.8039255499998589
+Total number of actions inside episode:  1940
+Episode reward 7807.020000000006
+Response rate 0.8104160246533127
+3076 16225
+Episode:  6
+BETA:  0.7682904999998332
+Total number of actions inside episode:  2002
+Episode reward 7657.970000000006
+Response rate 0.8112172573189522
+3063 16225
+Episode:  7
+BETA:  0.7326554499998076
+Total number of actions inside episode:  1951
+Episode reward 7517.160000000002
+Response rate 0.8111556240369799
+3064 16225
+Episode:  8
+BETA:  0.6970203999997819
+Total number of actions inside episode:  1921
+Episode reward 7394.4200000000055
+Response rate 0.8096764252696456
+3088 16225
+Episode:  9
+BETA:  0.6613853499997563
+Total number of actions inside episode:  1908
+Episode reward 7275.110000000003
+Response rate 0.8070261941448382
+3131 16225
+Episode:  10
+BETA:  0.6257502999997306
+Total number of actions inside episode:  1921
+Episode reward 7154.2599999999975
+Response rate 0.8076425269645608
+3121 16225
+Episode:  11
+BETA:  0.590115249999705
+Total number of actions inside episode:  1981
+Episode reward 7373.320000000004
+Response rate 0.8088751926040062
+3101 16225
+Episode:  12
+BETA:  0.5544801999996793
+Total number of actions inside episode:  1871
+Episode reward 7174.180000000004
+Response rate 0.8066563944530046
+3137 16225
+Episode:  13
+BETA:  0.5188451499996537
+Total number of actions inside episode:  2000
+Episode reward 7347.360000000007
+Response rate 0.8112172573189522
+3063 16225
+Episode:  14
+BETA:  0.48321009999962805
+Total number of actions inside episode:  2062
+Episode reward 7464.820000000006
+Response rate 0.8128813559322035
+3036 16225
+Episode:  15
+BETA:  0.4475750499996024
+Total number of actions inside episode:  1889
+Episode reward 7080.180000000001
+Response rate 0.8054237288135593
+3157 16225
+Episode:  16
+BETA:  0.41193999999957676
+Total number of actions inside episode:  2076
+Episode reward 7450.690000000004
+Response rate 0.8137442218798151
+3022 16225
+Episode:  17
+BETA:  0.3763049499995511
+Total number of actions inside episode:  1992
+Episode reward 7250.430000000009
+Response rate 0.8122650231124807
+3046 16225
+Episode:  18
+BETA:  0.34066989999952546
+Total number of actions inside episode:  2045
+Episode reward 7268.359999999998
+Response rate 0.8130046224961479
+3034 16225
+Episode:  19
+BETA:  0.3050348499994998
+Total number of actions inside episode:  2007
+Episode reward 7028.580000000014
+Response rate 0.8064098613251156
+3141 16225
+Episode:  20
+BETA:  0.26939979999947417
+Total number of actions inside episode:  2178
+Episode reward 7375.6599999999935
+Response rate 0.8132511556240369
+3030 16225
+Episode:  21
+BETA:  0.23376474999944852
+Total number of actions inside episode:  1994
+Episode reward 6796.379999999994
+Response rate 0.8065331278890601
+3139 16225
+Episode:  22
+BETA:  0.19812969999942287
+Total number of actions inside episode:  2096
+Episode reward 7080.240000000006
+Response rate 0.8097996918335901
+3086 16225
+Episode:  23
+BETA:  0.16249464999939722
+Total number of actions inside episode:  1953
+Episode reward 6662.550000000005
+Response rate 0.8017257318952234
+3217 16225
+Episode:  24
+BETA:  0.12685959999937158
+Total number of actions inside episode:  2123
+Episode reward 7042.8700000000035
+Response rate 0.8099229583975347
+3084 16225
+Episode:  25
+BETA:  0.09122454999934593
+Total number of actions inside episode:  2215
+Episode reward 6992.899999999999
+Response rate 0.8089984591679507
+3099 16225
+Episode:  26
+BETA:  0.055589499999329973
+Total number of actions inside episode:  2359
+Episode reward 7264.489999999992
+Response rate 0.8115870570107858
+3057 16225
+Episode:  27
+BETA:  0.01995444999934636
+Total number of actions inside episode:  2274
+Episode reward 6884.489999999992
+Response rate 0.8065947611710323
+3138 16225

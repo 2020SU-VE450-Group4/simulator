@@ -11,3 +11,7 @@ model/a2c
 __pycache__/*
 
 archive
+
+Archive.zip
+
+*_net

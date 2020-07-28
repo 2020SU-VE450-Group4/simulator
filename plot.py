@@ -34,12 +34,14 @@ for l in new_lines:
 # axes[0].8835.22
 plt.plot(reward)
 plt.plot(range(58, 70), greedy)
-value = sum(greedy)/len(greedy)
-plt.hlines(value, 0,70)
-value2 = sum(reward[-12:])/12
-plt.hlines(value2, 0,70)
+# value = sum(greedy)/len(greedy)
+# plt.hlines(value, 0,70)
+# value2 = sum(reward[-12:])/12
+# plt.hlines(value2, 0,70)
 # axes[1].plot(np_move_avg(reward, 100))
 plt.xlabel("Episode")
 plt.ylabel("Reward (Accumulated Driver Income)")
+plt.legend(["Training process of RL algorithm", "Myopic income maximization"])
+
 plt.show()
-print(value, value2, (value2-value)/value*100, (max(reward)-max(greedy))/value*100)
+# print(value, value2, (value2-value)/value*100, (max(reward)-max(greedy))/value*100)

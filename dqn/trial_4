@@ -1,3 +1,12 @@
+TOTAL_STEPS = 400000
+BATCH_SIZE = 1024
+LR = 0.0001                   # learning rate
+EPSILON_END = 0.95             # greedy policy
+EPSILON_START = 0
+EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
+GAMMA = 0.9                 # reward discount
+TARGET_REPLACE_ITER = 3000  # target update frequency
+MEMORY_CAPACITY = 80000
 Start training
 Episode:  0
 Epsilon 0.017097625000001216

@@ -15,16 +15,16 @@ logger_ch.setFormatter(logging.Formatter(
 logger.addHandler(logger_ch)
 RANDOM_SEED = 0  # unit test use this random seed.
 
-RUN_SAMPLE_SCALE = True
+RUN_SAMPLE_SCALE = False
 global CONST
 if RUN_SAMPLE_SCALE:
-    CONST = {"reposition_time": 180*6, "driver_online_interval": 3600, "driver_ratio": 1/10}
+    CONST = {"reposition_time": 180*6, "driver_online_interval": 3600, "driver_ratio": 1/10, "order_ratio": 1}
 else:
-    CONST = {"reposition_time": 180, "driver_online_interval": 600, "driver_ratio": 1}
+    CONST = {"reposition_time": 180, "driver_online_interval": 600, "driver_ratio": 1/6, "order_ratio": 1/6}
 
 class CityReal:
 
-    def __init__(self, all_grids, neighbour_dict, start_time_string, real_bool, coordinate_based, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
+    def __init__(self, all_grids, neighbour_dict, start_time_string, end_time_string, real_bool, coordinate_based, order_num_dist, transition_prob_dict, transition_trip_time_dict, transition_reward_dict,
                  init_idle_driver, working_time_dist, probability=1.0/28, real_orders="", order_generation_interval=600, driver_online_interval=600):
         """
         :param all_grids: a list of hexagon grid ids
@@ -73,6 +73,7 @@ class CityReal:
             grid.set_neighbours(neighbour)
 
         self.start_time = start_time_string  # e.g. "2016/11/01 10:00:00"
+        self.end_time = int(time.mktime(datetime.strptime(end_time_string, "%Y/%m/%d %H:%M:%S").timetuple()))
         self.city_time = int(time.mktime(datetime.strptime(self.start_time, "%Y/%m/%d %H:%M:%S").timetuple()))
         self.order_response_rate = 0
 
@@ -455,13 +456,15 @@ class CityReal:
 
     def utility_real_oneday_order(self):
         new_order_count = 0
-        for order in self.real_orders:
+        for idx, order in enumerate(self.real_orders):
             # here order is in the format of start_grid_id, start_time, end_grid_id, trip_time, price, start_lng, start_lat, end_lng, end_lat
-            if int(order[1]) >= self.city_time:
-                start_grid = self.grids[str(order[0])]
-                end_grid = self.grids[str(order[2])]
-                start_grid.add_order(new_order_count + self.n_orders, int(order[1]), end_grid, int(order[3]), float(order[4]))  # can specify wait time here
-                new_order_count += 1
+            if idx%(int(1/CONST["order_ratio"])) == 0:
+                if (self.end_time is None and int(order[1]) >= self.city_time) or (self.city_time <= int(order[1]) <= self.end_time):
+                    start_grid = self.grids[str(order[0])]
+                    end_grid = self.grids[str(order[2])]
+                    start_grid.add_order(new_order_count + self.n_orders, int(order[1]), end_grid, int(order[3]), float(order[4]),
+                                     wait_time=None, begin_co=(float(order[5]), float(order[6])), end_co=(float(order[7]), float(order[8])))  # can specify wait time here
+                    new_order_count += 1
         self.n_orders += new_order_count
 
 

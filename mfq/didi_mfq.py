@@ -9,19 +9,15 @@ from mfq.city_sample import create_city   # here
 from simulator.objects import Order
 
 
-# import os
-# print(os.getcwd())
-
 # Hyper Parameters
-TOTAL_STEPS = 400000
+TOTAL_STEPS = 200000
 BATCH_SIZE = 1024
 LR = 0.0001                   # learning rate
-EPSILON_END = 0.95             # greedy policy
-EPSILON_START = 0
-EPSILON_STEP = (EPSILON_END-EPSILON_START)/TOTAL_STEPS
 GAMMA = 0.9                 # reward discount
-BETA = 0.001                # exploration rate for Boltzmann equation
-TARGET_REPLACE_ITER = 3000  # target update frequency
+BETA_START = 1                # exploration rate for Boltzmann equation
+BETA_END = 0.1
+BETA_STEP = (BETA_END-BETA_START)/TOTAL_STEPS
+TARGET_REPLACE_ITER = 300   # soft target update frequency
 TAU = 0.01                  # soft replacement
 MEMORY_CAPACITY = 80000
 NUM_GRIDS = 100  # 1322
@@ -85,17 +81,17 @@ class MFQ(object):
 
         self.learn_step_counter = 0                                     # for target updating
         self.memory_counter = 0                                         # for storing memory
-        self.memory = np.zeros((MEMORY_CAPACITY, dim_states * 2 + dim_action*2 + 4))     # initialize memory
+        self.memory = np.zeros((MEMORY_CAPACITY, dim_states * 2 + dim_action*2 + 4))     # initialize memory， here
         self.optimizer = torch.optim.Adam(self.eval_net.parameters(), lr=LR)
         self.loss_func = nn.MSELoss()
 
-    def choose_action(self, _s, _actions, a_bar):
+    def choose_action(self, _s, _actions, a_bar, BETA):
         values = []
         for a in _actions:
             x = torch.unsqueeze(torch.tensor(_s + a + [a_bar], dtype=torch.float), 0)  # add dimension at 0
             values.append(self.eval_net.forward(x).data.numpy().flatten()[0])
 
-        b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
+        b_val = [val/BETA for val in values]  #Boltzmann, here
         probs = np.exp(b_val) / np.sum(np.exp(b_val))
         _a = np.random.choice(len(_actions), p=probs)
         return _a
@@ -111,19 +107,19 @@ class MFQ(object):
         action = actions[a_]
         return action
 
-    def calculate_mf(self, _s, actions, a_bar):
+    def calculate_mf(self, _s, actions, a_bar, BETA):
         values = []
         for a in actions:
             x = torch.unsqueeze(torch.tensor(_s + a + [a_bar], dtype=torch.float), 0)  # add dimension at 0
             values.append(self.target_net.forward(x).data.numpy().flatten()[0])
 
-        b_val = [-1.0 * val * BETA for val in values]  #Boltzmann
+        b_val = [val / BETA for val in values]  #Boltzmann
         probs = np.exp(b_val) / np.sum(np.exp(b_val))
         vmf = sum(np.multiply(values, probs))
         return vmf
 
     def store_transition(self, s, a, r, s_, a_, a_bar, v_mf, done):
-        transition = np.hstack((s, a, [r], s_, a_, [a_bar], [v_mf], done))
+        transition = np.hstack((s, a, [a_bar], [r], s_, a_, [v_mf], done))  # here
         # replace the old memory with new memory
         index = self.memory_counter % MEMORY_CAPACITY
         self.memory[index, :] = transition
@@ -146,16 +142,14 @@ class MFQ(object):
             sample_index = np.random.choice(MEMORY_CAPACITY, size=BATCH_SIZE)
         else:
             sample_index = np.random.choice(self.memory_counter, size=BATCH_SIZE)
-        # sample_index = np.random.choice(MEMORY_CAPACITY, BATCH_SIZE)
         b_memory = self.memory[sample_index, :]
-        state_action = torch.tensor(b_memory[:, :DIM_STATE+DIM_ACTION+1], dtype=torch.float)
+        state_action_a_bar = torch.tensor(b_memory[:, :DIM_STATE+DIM_ACTION+1], dtype=torch.float)
         reward = torch.tensor(b_memory[:, DIM_STATE+DIM_ACTION+1:DIM_STATE+DIM_ACTION+2], dtype=torch.float)
-        detach_state = torch.tensor(b_memory[:, -DIM_STATE-DIM_ACTION-1:-2], dtype=torch.float)
-        v_mf = torch.tensor(b_memory[:, -2], dtype=torch.float)
-        done = torch.tensor(b_memory[:, -1], dtype=torch.float)
+        v_mf = torch.tensor(b_memory[:, -2:-1], dtype=torch.float)
+        done = torch.tensor(b_memory[:, -1:], dtype=torch.float)
 
         # q_eval w.r.t the action in experience
-        q_eval = self.eval_net(state_action)  # .gather(1, action)  # shape (batch, 1)
+        q_eval = self.eval_net(state_action_a_bar)  # .gather(1, action)  # shape (batch, 1)
         # q_target = reward + GAMMA * v_mf.max(1)[0].view(BATCH_SIZE, 1)   # shape (batch, 1)
         q_target = reward + GAMMA * v_mf
         loss = self.loss_func(q_eval, q_target)
@@ -172,7 +166,7 @@ if __name__ == '__main__':
 
     print("Start training")
 
-    epsilon = EPSILON_START
+    BETA = BETA_START
     minutes = 30
     for episode in range(80):
         # dicts of current active {drivers: [(loc, time), orders, neighbours]}
@@ -197,14 +191,8 @@ if __name__ == '__main__':
             # env.check_idle_drivers_in_grids()
             # print("end one cycle")
             ###########################################################################################################
-
-            # count += 1
-            if epsilon < EPSILON_END:
-                epsilon += EPSILON_STEP
-
             dispatched_orders = set()   # track orders that are taken
             dispatch_actions = []       # add in dispatch actions to update env
-            drivers_to_store = []
             for driver, [(loc, time), orders, drivers] in states.items():
                 # For check use.
                 #######################################################################################################
@@ -215,23 +203,22 @@ if __name__ == '__main__':
                 #         print("Pass")
                 #     else:
                 #         print("Error in driver location.")
-
                 #######################################################################################################
                 orders = [o for o in orders if o.order_id not in dispatched_orders]
                 idle_order = Order(None, loc, loc, env.city_time, duration=0, price=0)
                 orders.append(idle_order)
                 neighbours = loc.neighbours[0]
                 for nei_grid in neighbours:
-                    reposition_duration = 180
-                    if loc.get_node_index() in env.transition_trip_time_dict and \
-                            nei_grid.get_node_index() in env.transition_trip_time_dict[loc.get_node_index()]:
-                        reposition_duration = env.transition_trip_time_dict[loc.get_node_index()][nei_grid.get_node_index()][0]
+                    reposition_duration = 180 * 4.5
+                    # if loc.get_node_index() in env.transition_trip_time_dict and \
+                    #         nei_grid.get_node_index() in env.transition_trip_time_dict[loc.get_node_index()]:
+                    #     reposition_duration = env.transition_trip_time_dict[loc.get_node_index()][nei_grid.get_node_index()][0]
                     orders.append(Order(None, loc, nei_grid, env.city_time,
                                         reposition_duration, price=0))
                 if len(orders):
                     actions = [grid_map[o.get_begin_position_id()] + grid_map[o.get_end_position_id()] for o in orders]
                     a_bar = len(drivers) / len(orders)
-                    aid = mfq.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions, a_bar)
+                    aid = mfq.choose_action(grid_map[loc.get_node_index()] + get_time_one_hot(time), actions, a_bar, BETA)
                     a = actions[aid]
                     dispatched_orders.add(orders[aid].order_id)
 
@@ -249,12 +236,12 @@ if __name__ == '__main__':
                     if driver in busy_drivers.keys():  # means it has just finished previous order and become idle again
                         _s = grid_map[loc.get_node_index()] + get_time_one_hot(time)
                         _a = mfq.choose_action_max(_s, actions, a_bar)
-                        v_mf = mfq.calculate_mf(_s, actions, a_bar)
+                        v_mf = mfq.calculate_mf(_s, actions, a_bar, BETA)
                         # drivers_to_store.append(busy_drivers[driver] + [grid_map[loc.get_node_index()], time])
-                        ps, pa, pr = busy_drivers[driver]
+                        ps, pa, pr, a_bar = busy_drivers[driver]
                         mfq.store_transition(ps, pa, pr, _s, _a, a_bar, v_mf, False)
                         count += 1
-                    busy_drivers[driver] = [grid_map[loc.get_node_index()] + get_time_one_hot(time), a]
+                    busy_drivers[driver] = [grid_map[loc.get_node_index()] + get_time_one_hot(time), a, a_bar]
             states, r_, info = env.step(dispatch_actions)
             for driver in r_.keys():
                 assert driver in busy_drivers
@@ -263,11 +250,15 @@ if __name__ == '__main__':
 
             if mfq.memory_counter > BATCH_SIZE:
                 mfq.learn()
+                if BETA > BETA_END:
+                    BETA += BETA_STEP
+
         print("Episode: ", episode)
-        print("Epsilon", epsilon)
+        print("BETA: ", BETA)
         print("Total number of actions inside episode: ", count)
         print("Episode reward", episode_reward)
         print("Response rate", 1 - env.expired_order / env.n_orders)
+        print(env.expired_order, env.n_orders)
 
         # torch.save(mfq.eval_net.state_dict(), directory + "/eval_net")
         # torch.save(mfq.target_net.state_dict(), directory + "/target_net")

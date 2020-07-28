@@ -46,7 +46,7 @@ Response rate 0.7963636363636364
 Episode:  9
 Epsilon 0.8548812499996405
 Total number of actions inside episode:  9336
-Episode reward 9365.23
+Episode reward 8865.23
 Response rate 0.8051771956856703
 Episode:  10
 Epsilon 0.9403693749996012
@@ -56,5 +56,5 @@ Response rate 0.8015408320493066
 Episode:  11
 Epsilon 0.9500118749995967
 Total number of actions inside episode:  9236
-Episode reward 9117.750000000005
+Episode reward 8817.750000000005
 Response rate 0.8004314329738058
