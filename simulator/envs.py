@@ -299,6 +299,7 @@ class CityReal:
             order_end_time = driver.order.get_assigned_time() + driver.order.get_duration()
             if driver.city_time >= order_end_time:
                 driver.set_position(driver.order.get_end_position())
+                driver.coordinate = driver.order.get_end_coordinate()
                 driver.set_order_finish()
                 driver.node.add_driver(driver.get_driver_id(), driver)
                 self.onservice_drivers.pop(driver_id)

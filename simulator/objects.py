@@ -186,6 +186,9 @@ class Driver(object):
     def set_position(self, node):
         self.node = node
 
+    def set_coordinate(self, co):
+        self.coordinate = co
+
     def get_position(self):
         return self.node
 
@@ -228,6 +231,8 @@ class Driver(object):
         """
         assert self.online is True
         self.set_order_start(order)
+        self.set_position(None)
+        self.coordinate = None
         self.onservice = True
 
     def status_control_eachtime(self, city):
